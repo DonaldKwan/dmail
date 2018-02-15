@@ -9,7 +9,7 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="stylesheets/styles.css">
 
   <!-- Scripts (consider moving to body) -->
   <script src="https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js"></script>
@@ -21,12 +21,24 @@
   <h1>Decentralized Mail</h1>
   <div class="row">
       <div class="column" style="background-color:#aaa;">
-          <h2>Column 1</h2>
-          <p>Text</p>
+          <h2>Encryption</h2>
+          <p>Enter in the message you would like to encrypt: </p>
+          <form>
+            <input type="text" id = "plainMessage">
+            <br>
+            <br>
+            <input type="submit" value="Submit">
+          </form>
       </div>
       <div class="column" style="background-color:#bbb;">
-          <h2>Column 2</h2>
-          <p>Text</p>
+          <h2>Decryption</h2>
+          <p>Enter in the encrypted message you would like to decrypt: </p>
+          <form>
+            <input type="text" id = "encryptedMessage">
+            <br>
+            <br>
+            <input type="submit" value="Submit">
+          </form>
       </div>
   </div>
 
