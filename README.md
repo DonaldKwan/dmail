@@ -6,10 +6,10 @@ __Decentralized email running on the Ethereum Blockchain__
   <img src="https://raw.githubusercontent.com/UCSDTCT/Dmail/master/diagram.png"/>
 </p>
 
-__Dmail__ is an Ethereum DApp that allows for secure storage and retrieval of encrypted messages. It uses the RSA cryptosystem to encrypt messages: users generate key pairs in their browser and then store their public key and ciphertext on the blockchain while keeping their private key offline.
+__Dmail__ is an Ethereum DApp that faciliates secure storage and retrieval of encrypted messages.
 
- You can access your mailbox using your Ethereum address. This will give you a list of encrypted messages. You can decrypt any messages sent to you on the blockchain via your private key.
+It uses the RSA cryptosystem to ensure that your messages remain secret. Key generation is done in the browser. Public keys are uploaded to the blockchain, and private keys remain offline.
+
+When a user wishes to send a message to a receiver, the message is encrypted via the receiver's public key and the resulting ciphertext is posted to the blockchain. The receiver can access their mailbox using their Ethereum address, and this will give them a list of encrypted messages meant for their eyes only. The receiver can then decrypt these messages via their private key.
 
  JavaScript on the front-end handles encryption, decryption, and key generation. Smart contracts written in Solidity are used to interact with the blockchain.
-
-_Brought to you by Team CropTops_
