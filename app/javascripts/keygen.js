@@ -8,15 +8,17 @@
  *
  * @return {object} The receiver's public exponent, private exponent, and modulus (public)
  */
+
 function generate_keys() {
-  /* TODO */
-  var n = 1;
-  var e = 1;
-  var d = 1;
+
+  // bits: 1024 exponent: 0x10001
+  var pair = forge.pki.rsa.generateKeyPair(1024, 0x10001);
+
+  var public_key = forge.pki.publicKeyToPem(pair.publicKey);
+  var private_key = forge.pki.privateKeyToPem(pair.privateKey);
 
   return {
-    modulus: n,
-    public_exponent: e,
-    private_exponent: d
+    public_key: public_key,
+    private_key: private_key,
   };
 }
