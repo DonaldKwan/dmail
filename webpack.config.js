@@ -5,7 +5,7 @@ module.exports = {
   entry: './app/javascripts/app.js',
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'app.js'
+    filename: 'bundle.js'
   },
   plugins: [
     // Copy our app's index.html to the build folder.
