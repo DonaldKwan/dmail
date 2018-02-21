@@ -1,14 +1,16 @@
-// Require Materialize CSS
-require("materialize-loader");
-
-// Import the page's CSS. Webpack will know what to do with it.
-import "../stylesheets/app.css";
-
 // Import RSA functions.
 import "./rsa.js";
 
 // Require jQuery
 var $ = require("jquery");
+
+// Require Materialize CSS
+require("materialize-loader");
+import 'materialize-css/dist/js/materialize.min.js';
+import 'materialize-css/dist/css/materialize.min.css';
+
+// Import the page's CSS.
+import "../stylesheets/app.css";
 
 // Import smart contract libraries.
 import { default as Web3} from 'web3';
@@ -75,13 +77,14 @@ window.App = {
   */
 };
 
-window.addEventListener('load', function() {
+$(document).ready(function() {
   if (typeof web3 !== 'undefined') {
     // Provider (Metamask, etc.) found. Inject it into the window.
     window.web3 = new Web3(web3.currentProvider);
+    $('#accessMailbox').removeClass('hide')
   } else {
     // No provider found!
-    alert("Please install a Ethereum bridge such as MetaMask to use this DApp!")
+    $('#disableMailbox').removeClass('hide')
   }
 
   App.start();
