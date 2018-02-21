@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Meta attributes -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+
+  <!-- Title -->
+  <title>Dmail</title>
+
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+  <!-- div class="row">
+      <div class="column" style="background-color:#aaa;">
+          <h2>Encryption</h2>
+          <p>Enter in the message you would like to encrypt: </p>
+          <form>
+            <input type="text" id = "plainMessage">
+            <br>
+            <br>
+            <input type="submit" value="Submit">
+          </form>
+      </div>
+      <div class="column" style="background-color:#bbb;">
+          <h2>Decryption</h2>
+          <p>Enter in the encrypted message you would like to decrypt: </p>
+          <form>
+            <input type="text" id = "encryptedMessage">
+            <br>
+            <br>
+            <input type="submit" value="Submit">
+          </form>
+      </div>
+  </div -->
+
+  <!-- Page content (excluding footer) -->
+  <main>
+
+    <!-- MetaMask not found -->
+    <div class="section hide" id="disableMailbox">
+      <div class="container">
+
+        <h1 class="header center amber-text">Mailbox Unavailable</h1>
+
+        <div class="row center">
+          <h5 class="header col s12 light">Please install <a href="https://metamask.io/">MetaMask</a> before you proceed!</h5>
+        </div>
+
+        <div class="row center">
+          <h5 class="header col s12 light">MetaMask acts as a bridge between the Internet and the Ethereum blockchain. Your mailbox needs it to function correctly.</h5>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Enter Ethereum address -->
+    <div class="section hide" id="accessMailbox">
+      <div class="container">
+
+        <h1 class="header center amber-text">Access Your Mailbox</h1>
+
+        <div class="row center">
+          <h5 class="header col s12 light">Enter your Ethereum address to proceed.</h5>
+        </div>
+
+        <div class="row">
+          <form class="col s12">
+            <div class="row">
+              <div class="input-field col s12">
+                <input placeholder="0x123f681646d4a755815f9cb19e1acc8565a0c2ac" id="address" type="text" class="validate">
+                <label for="address">Ethereum address</label>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- No public key associated with given ethereum address -->
+    <div class="section hide" id="setupMailbox">
+      <div class="container">
+
+        <h1 class="header center amber-text">Setup Your Mailbox</h1>
+
+      </div>
+    </div>
+
+    <!-- Public key found, load mailbox -->
+    <div class="section hide" id="useMailbox">
+      <div class="container">
+
+        <h1 class="header center amber-text">Your Mailbox</h1>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bundled script -->
+  <script src="./bundle.js"></script>
+</body>
+</html>
