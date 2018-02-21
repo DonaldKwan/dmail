@@ -1,3 +1,6 @@
+// Require Materialize CSS
+require("materialize-loader");
+
 // Import the page's CSS. Webpack will know what to do with it.
 import "../stylesheets/app.css";
 
@@ -6,9 +9,6 @@ import "./rsa.js";
 
 // Require jQuery
 var $ = require("jquery");
-
-// Require Materialize CSS
-require("materialize-loader");
 
 // Import smart contract libraries.
 import { default as Web3} from 'web3';
