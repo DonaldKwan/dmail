@@ -34,6 +34,20 @@ window.App = {
 
     // Get the user's account.
     account = web3.eth.accounts[0];
+
+    // Update the address display
+    $('#addressDisplay').text("Your address is "+account+".");
+
+    if (self.getPublicKey(account) !== undefined) {
+      $('#useMailbox').removeClass('hide');
+    }
+    else {
+      $('#setupMailbox').removeClass('hide');
+    }
+  },
+
+  getPublicKey: function(address) {
+    return address;
   }
 
   /*
@@ -73,7 +87,6 @@ window.App = {
       self.setStatus("Error sending coin; see log.");
     });
   }
-
   */
 };
 
@@ -81,10 +94,9 @@ $(document).ready(function() {
   if (typeof web3 !== 'undefined') {
     // Provider (Metamask, etc.) found. Inject it into the window.
     window.web3 = new Web3(web3.currentProvider);
-    $('#accessMailbox').removeClass('hide')
   } else {
     // No provider found!
-    $('#disableMailbox').removeClass('hide')
+    $('#disableMailbox').removeClass('hide');
   }
 
   App.start();
