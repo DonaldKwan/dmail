@@ -1,6 +1,6 @@
 # Dmail
 
-__Decentralized email running on the Ethereum Blockchain__
+__Decentralized email running on the Ethereum blockchain__
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/UCSDTCT/Dmail/master/diagram.png"/>

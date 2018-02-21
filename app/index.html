@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Meta attributes -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+
   <!-- Title -->
   <title>Dmail</title>
 
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-  <h1>Decentralized Mail</h1>
-  <div class="row">
+  <!-- div class="row">
       <div class="column" style="background-color:#aaa;">
           <h2>Encryption</h2>
           <p>Enter in the message you would like to encrypt: </p>
@@ -31,7 +35,90 @@
             <input type="submit" value="Submit">
           </form>
       </div>
-  </div>
+  </div -->
+
+  <!-- Page content (excluding footer) -->
+  <main>
+
+    <!-- Header -->
+    <div class="section">
+      <div class="container">
+        <br><br>
+
+        <h1 class="header center amber-text">Dmail</h1>
+
+        <div class="row center">
+          <h5 class="header col s12 light">Decentralized mail using the power of the Ethereum blockchain</h5>
+        </div>
+
+        <div class="row center">
+          <a href="#!" class="btn-large waves-effect waves-light amber">View Your Mailbox</a>
+        </div>
+
+        <br><br>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="section">
+      <div class="container">
+
+        <div class="row">
+          <div class="col s12 m4">
+            <div class="icon-block">
+              <h2 class="center blue-text"><i class="large material-icons">accessibility</i></h2>
+              <h5 class="center">Easily accessible</h5>
+              <p class="light">Your data is easily accessible through our UI. All you need to send or receive messages is your Ethereum address and an RSA keypair that is generated in your browser. Your public key is uploaded to the blockchain, and you hold on to your private key. When you want to access your mailbox, you provide your Ethereum address and your private key.</p>
+            </div>
+          </div>
+
+          <div class="col s12 m4">
+            <div class="icon-block">
+              <h2 class="center blue-text"><i class="large material-icons">storage</i></h2>
+              <h5 class="center">Distributed, replicated storage</h5>
+              <p class="light">Your encrypted messages and public key are kept on the Ethereum blockchain. This means that they can never be lost, as the blockchain ensures that your data is replicated and perserved across thousands of nodes.</p>
+            </div>
+          </div>
+
+          <div class="col s12 m4">
+            <div class="icon-block">
+              <h2 class="center blue-text"><i class="large material-icons">security</i></h2>
+              <h5 class="center">Guaranteed security</h5>
+              <p class="light">Most importantly, the content of your sent & received messages is kept secret from everyone but the parties involved. Ciphertext is uploaded to the blockchain, and only the receiver can decrypt it. Additionally, all of this is done in your browser, so no sensitive information is leaked. Not even our server has access to it.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="page-footer amber">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Triton Software Engineering</h5>
+          <p class="grey-text text-lighten-4">We are an UCSD organization aiming to support any individuals interested in software engineering. This project is maintained by a four-man branch of the organization. Drop us a line if you think this is cool: any support is appreciated.</p>
+        </div>
+        <div class="col l3 s12 offset-l3">
+          <h5 class="white-text">Developers</h5>
+          <ul>
+            <li><a class="white-text" href="https://github.com/DonaldKwan">Donald Kwan</a></li>
+            <li><a class="white-text" href="https://github.com/hahsu">Hannah Hsu</a></li>
+            <li><a class="white-text" href="https://github.com/hollyham">Holly Ham</a></li>
+            <li><a class="white-text" href="https://github.com/dmhacker">David Hacker</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made at <a class="amber-text text-lighten-4" href="http://ucsd.edu">UCSD</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- Bundled script -->
   <script src="./bundle.js"></script>
