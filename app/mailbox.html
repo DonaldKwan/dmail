@@ -25,9 +25,6 @@
 
         <div class="row center">
           <h5 class="header col s12 light">Please install <a href="https://metamask.io/">MetaMask</a> before you proceed!</h5>
-        </div>
-
-        <div class="row center">
           <h5 class="header col s12 light">MetaMask acts as a bridge between the Internet and the Ethereum blockchain. Your mailbox needs it to function correctly.</h5>
         </div>
 
@@ -44,13 +41,14 @@
           <h5 class="header col s12 light">Enter your Ethereum address to proceed.</h5>
         </div>
 
-        <div class="row">
+        <div class="row center">
           <form class="col s12">
             <div class="row">
               <div class="input-field col s12">
                 <input placeholder="0x123f681646d4a755815f9cb19e1acc8565a0c2ac" id="address" type="text" class="validate">
                 <label for="address">Ethereum address</label>
               </div>
+              <a href="#!" class="btn waves-effect waves-light amber">Submit</a>
             </div>
           </form>
         </div>
@@ -79,12 +77,11 @@
 
           <!-- Private key (TODO: consider copying this automatically into clipboard too) -->
           <div class="col s12 l6">
-            <h2 class="header amber-text">Your Private Key</h2>
+            <h3 class="header amber-text">Your Private Key</h3>
             <p>Copy this and store it somewhere safe. Your key is automatically stored in the browser cache, but if the cache is reset, you will have to input this again to read your messages.</p>
             <div class="card horizontal">
-              <div class="card-stacked">
-                <div class="card-content">
-                  <p id="privateKey">-----BEGIN RSA PRIVATE KEY-----
+              <div class="card-content">
+                <p id="privateKey">-----BEGIN RSA PRIVATE KEY-----
 MIIBOQIBAAJBAIOLepgdqXrM07O4dV/nJ5gSA12jcjBeBXK5mZO7Gc778HuvhJi+
 RvqhSi82EuN9sHPx1iQqaCuXuS1vpuqvYiUCAwEAAQJATRDbCuFd2EbFxGXNxhjL
 loj/Fc3a6UE8GeFoeydDUIJjWifbCAQsptSPIT5vhcudZgWEMDSXrIn79nXvyPy5
@@ -93,19 +90,17 @@ SwVJ8NAF4AikBmYxOJPUxnPjEp8D23sCIA3ZcNqWL7myQ0CZ/W/oGVcQzhwkDbck
 3GJEZuAB/vd3AiASmnvOZs9BuKgkCdhlrtlM6/7E+y1p++VU6bh2+mI8ZwIgf4Qh
 u+zYCJfIjtJJpH1lHZW+A60iThKtezaCk7FiAC4=
 -----END RSA PRIVATE KEY-----</p>
-                </div>
               </div>
             </div>
           </div>
 
           <!-- Public key, disable copying because it is not relevant -->
           <div class="col s12 l6">
-            <h2 class="header amber-text">Your Public Key</h2>
+            <h3 class="header amber-text">Your Public Key</h3>
             <p>This key has been stored on the blockchain. No need to save it! When people want to send messages to you, they will use your public key to encrypt messages meant for you.</p>
             <div class="card horizontal">
-              <div class="card-stacked">
-                <div class="card-content">
-                  <p onmousedown='return false;' onselectstart='return false;' id="publicKey">-----BEGIN RSA PUBLIC KEY-----
+              <div class="card-content">
+                <p onmousedown='return false;' onselectstart='return false;' id="publicKey">-----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEA+xGZ/wcz9ugFpP07Nspo6U17l0YhFiFpxxU4pTk3Lifz9R3zsIsu
 ERwta7+fWIfxOo208ett/jhskiVodSEt3QBGh4XBipyWopKwZ93HHaDVZAALi/2A
 +xTBtWdEo7XGUujKDvC2/aZKukfjpOiUI8AhLAfjmlcD/UZ1QPh0mHsglRNCmpCw
@@ -113,14 +108,13 @@ mwSXA9VNmhz+PiB+Dml4WWnKW/VHo2ujTXxq7+efMU4H2fny3Se3KYOsFPFGZ1TN
 QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
 +0uj1CNlNN4JRZlC7xFfqiMbFRU9Z4N6YwIDAQAB
 -----END RSA PUBLIC KEY-----</p>
-                </div>
               </div>
             </div>
           </div>
 
           <!-- Button to proceed to #useMailbox -->
           <div class="col s12 center">
-            <a href="#!" class="btn-large waves-effect waves-light amber confirmButton">I saved my private key. Onwards!</a>
+            <a href="#!" class="btn waves-effect waves-light amber confirmButton">I saved my private key. Onwards!</a>
           </div>
 
         </div>
@@ -133,6 +127,45 @@ QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
       <div class="container">
 
         <h1 class="header center amber-text">Your Mailbox</h1>
+
+        <div class="row center">
+          <h5 class="header col s12 light">Your address is 0x123f681646d4a755815f9cb19e1acc8565a0c2ac.</h5>
+        </div>
+
+        <div class="row">
+          <!-- Message send column -->
+          <div class="col s12">
+            <h3 class="header amber-text">Send a Message</h3>
+
+            <div class="row">
+              <div class="col s12">
+                <div class="card">
+                  <div class="card-content">
+                    <form>
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <input id="recipient" type="text" class="validate">
+                          <label for="recipient">Recipient</label>
+                        </div>
+                        <div class="input-field col s12">
+                          <textarea class="materialize-textarea validate" id="message" type="text"></textarea>
+                          <label for="message">Message</label>
+                        </div>
+                      </div>
+                      <a href="#!" class="btn waves-effect waves-light amber center">Submit</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message receive column -->
+          <div class="col s12">
+            <h3 class="amber-text">Messages Received</h3>
+            <!-- TODO: show list of messages -->
+          </div>
+        </div>
 
       </div>
     </div>
