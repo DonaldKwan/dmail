@@ -38,6 +38,8 @@ window.App = {
     // Update the address display
     $('#addressDisplay').text("Your address is "+account+".");
 
+    // Change screens (loading -> setup/use)
+    $('#loadingMailbox').addClass('hide');
     if (self.getPublicKey(account) !== undefined) {
       $('#useMailbox').removeClass('hide');
     }
@@ -94,6 +96,7 @@ $(document).ready(function() {
   if (typeof web3 !== 'undefined') {
     // Provider (Metamask, etc.) found. Inject it into the window.
     window.web3 = new Web3(web3.currentProvider);
+    $('#loadingMailbox').removeClass('hide');
   } else {
     // No provider found!
     $('#disableMailbox').removeClass('hide');

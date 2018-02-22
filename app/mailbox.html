@@ -25,7 +25,29 @@
 
         <div class="row center">
           <h5 class="header col s12 light">Please install <a href="https://metamask.io/">MetaMask</a> before you proceed!</h5>
-          <h5 class="header col s12 light">MetaMask acts as a bridge between the Internet and the Ethereum blockchain. Your mailbox needs it to function correctly.</h5>
+          <h5 class="header col s12 light">MetaMask acts as a bridge between the Internet and the Ethereum blockchain.</h5>
+          <h5 class="header col s12 light">Your mailbox needs it to function correctly.</h5>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Loading screen -->
+    <div class="section hide" id="loadingMailbox">
+      <div class="container">
+
+        <div class="row center">
+          <div class="preloader-wrapper big active loadingVAlign">
+            <div class="spinner-layer spinner-blue-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -38,13 +60,23 @@
         <h1 class="header center amber-text">Mailbox Setup</h1>
 
         <div class="row center">
-          <h5 class="header col s12 light">No mailbox was found matching your address.</h5>
-          <h5 class="header col s12 light">Setting up a new one for you ...</h5>
+          <h5 class="header col s12 light">Your Ethereum address has no mailbox associated with it.</h5>
+          <h5 class="header col s12 light">Let's make one then!</h5>
         </div>
 
         <!-- Progress bar for when keys are being generated -->
-        <div class="progress" id="keygenProgress">
-            <div class="indeterminate"></div>
+        <div class="row center" id="keygenProgress">
+          <div class="preloader-wrapper big active setupVAlign">
+            <div class="spinner-layer spinner-blue-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Keygen is done -->
