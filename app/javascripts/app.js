@@ -36,15 +36,15 @@ window.App = {
     account = web3.eth.accounts[0];
 
     // Update the address display
-    $('#addressDisplay').text("Your address is "+account+".");
+    $('#display-address').text("Your address is "+account+".");
 
     // Change screens (loading -> setup/use)
-    $('#loadingMailbox').addClass('hide');
+    $('#loading-mailbox').addClass('hide');
     if (self.getPublicKey(account) !== undefined) {
-      $('#useMailbox').removeClass('hide');
+      $('#use-mailbox').removeClass('hide');
     }
     else {
-      $('#setupMailbox').removeClass('hide');
+      $('#setup-mailbox').removeClass('hide');
     }
   },
 
@@ -96,10 +96,10 @@ $(document).ready(function() {
   if (typeof web3 !== 'undefined') {
     // Provider (Metamask, etc.) found. Inject it into the window.
     window.web3 = new Web3(web3.currentProvider);
-    $('#loadingMailbox').removeClass('hide');
+    $('#loading-mailbox').removeClass('hide');
   } else {
     // No provider found!
-    $('#disableMailbox').removeClass('hide');
+    $('#disable-mailbox').removeClass('hide');
   }
 
   App.start();

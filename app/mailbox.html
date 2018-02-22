@@ -18,7 +18,7 @@
   <main>
 
     <!-- MetaMask not found -->
-    <div class="section hide" id="disableMailbox">
+    <div class="section hide" id="disable-mailbox">
       <div class="container">
 
         <h1 class="header center amber-text">Mailbox Unavailable</h1>
@@ -33,11 +33,11 @@
     </div>
 
     <!-- Loading screen -->
-    <div class="section hide" id="loadingMailbox">
+    <div class="section hide" id="loading-mailbox">
       <div class="container">
 
         <div class="row center">
-          <div class="preloader-wrapper big active loadingVAlign">
+          <div class="preloader-wrapper big active valign-loading">
             <div class="spinner-layer spinner-blue-only">
               <div class="circle-clipper left">
                 <div class="circle"></div>
@@ -54,7 +54,7 @@
     </div>
 
     <!-- No public key associated with given ethereum address -->
-    <div class="section hide" id="setupMailbox">
+    <div class="section hide" id="setup-mailbox">
       <div class="container">
 
         <h1 class="header center amber-text">Mailbox Setup</h1>
@@ -65,8 +65,8 @@
         </div>
 
         <!-- Progress bar for when keys are being generated -->
-        <div class="row center" id="keygenProgress">
-          <div class="preloader-wrapper big active setupVAlign">
+        <div class="row center" id="doing-keygen">
+          <div class="preloader-wrapper big active valign-setup">
             <div class="spinner-layer spinner-blue-only">
               <div class="circle-clipper left">
                 <div class="circle"></div>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Keygen is done -->
-        <div class="row hide" id="keygenDone">
+        <div class="row hide" id="finished-keygen">
 
           <!-- Private key (TODO: consider copying this automatically into clipboard too) -->
           <div class="col s12 l6">
@@ -88,15 +88,7 @@
             <p>Copy this and store it somewhere safe. Your key is automatically stored in the browser cache, but if the cache is reset, you will have to input this again to read your messages.</p>
             <div class="card horizontal">
               <div class="card-content">
-                <p id="privateKey">-----BEGIN RSA PRIVATE KEY-----
-MIIBOQIBAAJBAIOLepgdqXrM07O4dV/nJ5gSA12jcjBeBXK5mZO7Gc778HuvhJi+
-RvqhSi82EuN9sHPx1iQqaCuXuS1vpuqvYiUCAwEAAQJATRDbCuFd2EbFxGXNxhjL
-loj/Fc3a6UE8GeFoeydDUIJjWifbCAQsptSPIT5vhcudZgWEMDSXrIn79nXvyPy5
-BQIhAPU+XwrLGy0Hd4Roug+9IRMrlu0gtSvTJRWQ/b7m0fbfAiEAiVB7bUMynZf4
-SwVJ8NAF4AikBmYxOJPUxnPjEp8D23sCIA3ZcNqWL7myQ0CZ/W/oGVcQzhwkDbck
-3GJEZuAB/vd3AiASmnvOZs9BuKgkCdhlrtlM6/7E+y1p++VU6bh2+mI8ZwIgf4Qh
-u+zYCJfIjtJJpH1lHZW+A60iThKtezaCk7FiAC4=
------END RSA PRIVATE KEY-----</p>
+                <p id="display-private-key"></p>
               </div>
             </div>
           </div>
@@ -107,21 +99,14 @@ u+zYCJfIjtJJpH1lHZW+A60iThKtezaCk7FiAC4=
             <p>This key has been stored on the blockchain. No need to save it! When people want to send messages to you, they will use your public key to encrypt messages meant for you.</p>
             <div class="card horizontal">
               <div class="card-content">
-                <p onmousedown='return false;' onselectstart='return false;' id="publicKey">-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEA+xGZ/wcz9ugFpP07Nspo6U17l0YhFiFpxxU4pTk3Lifz9R3zsIsu
-ERwta7+fWIfxOo208ett/jhskiVodSEt3QBGh4XBipyWopKwZ93HHaDVZAALi/2A
-+xTBtWdEo7XGUujKDvC2/aZKukfjpOiUI8AhLAfjmlcD/UZ1QPh0mHsglRNCmpCw
-mwSXA9VNmhz+PiB+Dml4WWnKW/VHo2ujTXxq7+efMU4H2fny3Se3KYOsFPFGZ1TN
-QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
-+0uj1CNlNN4JRZlC7xFfqiMbFRU9Z4N6YwIDAQAB
------END RSA PUBLIC KEY-----</p>
+                <p onmousedown='return false;' onselectstart='return false;' id="display-public-key"></p>
               </div>
             </div>
           </div>
 
           <!-- Button to proceed to #useMailbox -->
           <div class="col s12 center">
-            <a href="#!" class="btn waves-effect waves-light amber confirmButton">I saved my private key. Onwards!</a>
+            <a href="#!" class="btn waves-effect waves-light amber confirm-button">I saved my private key. Onwards!</a>
           </div>
 
         </div>
@@ -130,13 +115,13 @@ QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
     </div>
 
     <!-- Public key found, load mailbox -->
-    <div class="section hide" id="useMailbox">
+    <div class="section hide" id="use-mailbox">
       <div class="container">
 
         <h1 class="header center amber-text">Your Mailbox</h1>
 
         <div class="row center">
-          <h5 class="header col s12 light" id="addressDisplay"></h5>
+          <h5 class="header col s12 light" id="display-address"></h5>
         </div>
 
         <div class="row">
@@ -144,11 +129,12 @@ QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
           <div class="col s12">
             <h3 class="header amber-text">Send a Message</h3>
 
+            <!-- Card specifying recipient and message -->
             <div class="row">
               <div class="col s12">
                 <div class="card">
                   <div class="card-content">
-                    <form>
+                    <form id="message-form">
                       <div class="row">
                         <div class="input-field col s12">
                           <input id="recipient" type="text" class="validate">
@@ -170,7 +156,29 @@ QSYlFuShWrHPtiLmUdPoP6CV2mML1tk+l7DIIqXrQhLUKDACeM5roMx0kLhUWB8P
           <!-- Message receive column -->
           <div class="col s12">
             <h3 class="amber-text">Messages Received</h3>
+
+            <!-- Card specifying private key (removed once inputted) -->
+            <div class="row" id="private-key-card">
+              <div class="col s12">
+                <div class="card">
+                  <div class="card-content">
+                    <form id="private-key-form">
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <textarea class="materialize-textarea validate" id="private-key" type="text"></textarea>
+                          <label for="private-key">Private Key</label>
+                        </div>
+                      </div>
+                      <a href="#!" class="btn waves-effect waves-light amber center">Submit</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
             <!-- TODO: show list of messages -->
+
           </div>
         </div>
 

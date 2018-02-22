@@ -8,14 +8,14 @@ main {
   flex: 1 0 auto;
 }
 
-.loadingVAlign {
+.valign-loading {
   margin-top: 40%;
 }
 
-.setupVAlign {
+.valign-setup {
   margin-top: 20%;
 }
 
-.confirmButton {
+.confirm-button {
   margin-top: 3em;
 }
