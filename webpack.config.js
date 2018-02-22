@@ -12,7 +12,7 @@ module.exports = {
       { from: './app/index.html', to: "index.html" }
     ]),
     new CopyWebpackPlugin([
-      { from: './app/mailbox.html', to: "mailbox.html" }
+      { from: './app/mailbox.html', to: "mailbox/index.html" }
     ])
   ],
   module: {

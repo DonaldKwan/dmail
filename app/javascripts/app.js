@@ -93,6 +93,8 @@ window.App = {
 };
 
 $(document).ready(function() {
+  $('body').addClass('loaded');
+
   if (typeof web3 !== 'undefined') {
     // Provider (Metamask, etc.) found. Inject it into the window.
     window.web3 = new Web3(web3.currentProvider);
