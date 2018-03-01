@@ -9,7 +9,7 @@ var $ = require("jquery");
 
 // Require Materialize CSS
 require("materialize-loader");
-import 'materialize-css/dist/js/materialize.min.js';
+import * as Materialize from 'materialize-css/dist/js/materialize.min.js';
 import 'materialize-css/dist/css/materialize.min.css';
 
 // Import the page's CSS.
@@ -28,9 +28,21 @@ var Dmail = contract(dmail_artifacts);
 // The account of the current user (should equal the one MetaMask refers to)
 var account;
 
+// Global constants
+const TOAST_DURATION = 3000;
+
 window.App = {
+
+  /**
+   * Starts the application. Responsible for mailbox setup too.
+   */
   start: function() {
-    var self = this;
+    var self = this; // NECESSARY: `this` changes when entering callback functions
+
+    // Return early if we are not on the right page
+    if (!document.getElementById('use-mailbox')) {
+      return;
+    }
 
     // Set the smart contract's provider.
     Dmail.setProvider(web3.currentProvider);
@@ -38,93 +50,151 @@ window.App = {
     // Get the user's account.
     account = web3.eth.accounts[0];
 
+    // Disable mailbox if we don't have a valid account
+    if (account === undefined) {
+      $('#loading-mailbox').addClass('hide');
+      $('#disable-mailbox').removeClass('hide');
+      return;
+    }
+
     // Update the address display
     $('#display-address').text("Your address is "+account+".");
 
     // Change screens (loading -> setup/use)
     $('#loading-mailbox').addClass('hide');
 
-    if (self.getPublicKeyPEM(account) !== undefined) {
-      $('#use-mailbox').removeClass('hide');
-    }
-    else {
-      $('#setup-mailbox').removeClass('hide');
+    self.getPublicKeyPEM(account, function (err, pem_public_key) {
+      if (err) {
+        Materialize.toast("An error occurred: " + err, TOAST_DURATION);
+        Materialize.toast("Try refreshing the page.", TOAST_DURATION);
+      }
+      // Account has no public key on the blockchain
+      else if (pem_public_key == undefined) {
+        $('#setup-mailbox').removeClass('hide');
 
-      console.log('Running keygen ...');
-      rsa.keygen(function(err, keypair) {
-        console.log('Keygen finished. Serializing, caching and displaying ...');
+        Materialize.toast("Generating keys ...", TOAST_DURATION);
 
-        // Serialize keypair
-        var pem_formats = rsa.serialize(keypair);
+        rsa.keygen(function(err, keypair) {
+          if (err) {
+            Materialize.toast("An error occurred: " + err, TOAST_DURATION);
+            Materialize.toast("Try refreshing the page.", TOAST_DURATION);
+          }
+          else {
+            Materialize.toast("Uploading public key ...", TOAST_DURATION);
 
-        // Save private key to cookies
-        Cookies.set('privatekey', pem_formats.privateKey);
+            // Serialize keypair
+            var pem_formats = rsa.serialize(keypair);
 
-        // Handle displays
-        $('#doing-keygen').addClass('hide');
-        $('#finished-keygen').removeClass('hide');
-        $('#display-private-key').text(pem_formats.privateKey);
-        $('#display-public-key').text(pem_formats.publicKey);
+            // Save private key to cookies
+            Cookies.set('address', account);
+            Cookies.set('privatekey', pem_formats.privateKey);
 
-        console.log('Keygen tasks done.');
-      });
-    }
+            // Upload public key to the blockchain
+            App.uploadPublicKey(account, pem_formats.publicKey, function (err) {
+              if (err) {
+                Materialize.toast("An error occurred: " + err, TOAST_DURATION);
+                Materialize.toast("Try refreshing the page.", TOAST_DURATION);
+              }
+              else {
+                Materialize.toast("Done!", TOAST_DURATION);
+
+                // Handle displays
+                $('#doing-keygen').addClass('hide');
+                $('#finished-keygen').removeClass('hide');
+                $('#display-private-key').text(pem_formats.privateKey);
+                $('#display-public-key').text(pem_formats.publicKey);
+              }
+            });
+          }
+        });
+      }
+      // Account has a public key on the blockchain
+      else {
+        self.open();
+      }
+    });
   },
 
-  getPublicKeyPEM: function(address) {
-    // TODO: Query the blockchain and retrieve the key in PEM format
-    return undefined;
+  /**
+   * Opens the mailbox usage screen and handles all actions there.
+   */
+  open: function() {
+    var self = this;
+
+    $('#setup-mailbox').addClass('hide');
+    $('#use-mailbox').removeClass('hide');
   },
 
-  getPrivateKeyPEM: function() {
-    var pem = Cookies.get('privatekey');
+  /**
+   * Returns the PEM of the public key corresponding to the provided Ethereum address.
+   * Queries the blockchain to retrieve the PEM.
+   *
+   * @param  {Object}   address  The ethereum address whose public key we want to retrieve
+   * @param  {Function} callback A function taking an error and a public key PEM (if successful, error will be null)
+   */
+  getPublicKeyPEM: function(address, callback) {
+    var self = this;
+
+    var pem = undefined;
+
+    // TODO: Query the smart contract and retrieve the key in PEM format
+    // See https://github.com/trufflesuite/truffle-init-webpack/blob/master/app/javascripts/app.js
+
+    callback(null, pem);
+  },
+
+  /**
+   * Returns the PEM of the private key.
+   * The function first checks the browser cache to see if a private key exists there. If a private key
+   * does it exist, it then checks to see if the private key's address corresponds to MetaMask's address.
+   * If no private key is found in the browser cache or a different private key is found, it asks the user
+   * to input the key in directly.
+   *
+   * @param  {Object}   address  The ethereum address whose private key we want to retrieve
+   * @param  {Function} callback A function taking an error and a private key PEM (if successful, error will be null)
+   */
+  getPrivateKeyPEM: function(address, callback) {
+    var self = this;
+
+    var pem = undefined;
+
+    // The user's account matches the saved address associated with the private key
+    if (Cookies.get('address') == String(address)) {
+      pem = Cookies.get('privatekey');
+    }
+
+    // Private key does not exist
     if (pem == undefined) {
       // TODO: Ask user to input their private key
     }
-    return pem;
-  }
 
-  /*
-  refreshBalance: function() {
-    var self = this;
-
-    var meta;
-    MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.getBalance.call(account, {from: account});
-    }).then(function(value) {
-      var balance_element = document.getElementById("balance");
-      balance_element.innerHTML = value.valueOf();
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error getting balance; see log.");
-    });
+    callback(null, pem);
   },
 
-  sendCoin: function() {
+   /**
+    * Uploads the given public key to the blockchain under the given Ethereum address.
+    *
+    * @param  {Object}   address    The ethereum address whose public key we are uploading
+    * @param  {Object}   public_key A Forge public key
+    * @param  {Function} callback   A function taking an error (if upload was successful, error will be null)
+    */
+  uploadPublicKey: function(address, public_key, callback) {
     var self = this;
 
-    var amount = parseInt(document.getElementById("amount").value);
-    var receiver = document.getElementById("receiver").value;
+    // TODO: Call smart contract
+    // See https://github.com/trufflesuite/truffle-init-webpack/blob/master/app/javascripts/app.js
 
-    this.setStatus("Initiating transaction... (please wait)");
-
-    var meta;
-    MetaCoin.deployed().then(function(instance) {
-      meta = instance;
-      return meta.sendCoin(receiver, amount, {from: account});
-    }).then(function() {
-      self.setStatus("Transaction complete!");
-      self.refreshBalance();
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error sending coin; see log.");
-    });
+    callback(null);
   }
-  */
 };
 
 $(document).ready(function() {
+  // Associate buttons with JS
+  $('#saved-private-key').click(function() {
+    App.open();
+  });
+
+  // Make page visible
   $('body').addClass('loaded');
 
   if (typeof web3 !== 'undefined') {
