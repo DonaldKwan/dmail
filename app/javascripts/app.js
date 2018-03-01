@@ -1,5 +1,8 @@
 // Import RSA functions.
-import "./rsa.js";
+import * as rsa from "./rsa.js";
+
+// Import cookies (for auto-saving private key)
+import Cookies from 'js-cookie';
 
 // Require jQuery
 var $ = require("jquery");
@@ -40,16 +43,45 @@ window.App = {
 
     // Change screens (loading -> setup/use)
     $('#loading-mailbox').addClass('hide');
-    if (self.getPublicKey(account) !== undefined) {
+
+    if (self.getPublicKeyPEM(account) !== undefined) {
       $('#use-mailbox').removeClass('hide');
     }
     else {
       $('#setup-mailbox').removeClass('hide');
+
+      console.log('Running keygen ...');
+      rsa.keygen(function(err, keypair) {
+        console.log('Keygen finished. Serializing, caching and displaying ...');
+
+        // Serialize keypair
+        var pem_formats = rsa.serialize(keypair);
+
+        // Save private key to cookies
+        Cookies.set('privatekey', pem_formats.privateKey);
+
+        // Handle displays
+        $('#doing-keygen').addClass('hide');
+        $('#finished-keygen').removeClass('hide');
+        $('#display-private-key').text(pem_formats.privateKey);
+        $('#display-public-key').text(pem_formats.publicKey);
+
+        console.log('Keygen tasks done.');
+      });
     }
   },
 
-  getPublicKey: function(address) {
-    return address;
+  getPublicKeyPEM: function(address) {
+    // TODO: Query the blockchain and retrieve the key in PEM format
+    return undefined;
+  },
+
+  getPrivateKeyPEM: function() {
+    var pem = Cookies.get('privatekey');
+    if (pem == undefined) {
+      // TODO: Ask user to input their private key
+    }
+    return pem;
   }
 
   /*

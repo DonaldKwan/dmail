@@ -7,14 +7,7 @@ var forge = require('node-forge');
  * @return {Object}            The user's keypair
  */
 function keygen(callback) {
-  forge.pki.rsa.generateKeyPair({bits: 2048, workers: 2}, function(err, keypair) {
-    if (err) {
-      // TODO: handle error
-    }
-    else {
-      callback(keypair);
-    }
-  });
+  forge.pki.rsa.generateKeyPair({bits: 2048, workers: 2}, callback);
 }
 
 /**
@@ -69,3 +62,4 @@ function encrypt(message, publicKey) {
   return publicKey.encrypt(bytes);
 }
 
+export { keygen, serialize, deserialize, decrypt, encrypt }

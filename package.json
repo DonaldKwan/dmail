@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "jquery": "^3.3.1",
+    "js-cookie": "^2.2.0",
     "materialize-css": "^0.100.2",
     "materialize-loader": "^2.0.2",
     "node-forge": "^0.7.1"
