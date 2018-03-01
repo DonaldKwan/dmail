@@ -65,6 +65,8 @@ window.App = {
 
     self.getPublicKeyPEM(account, function (err, pem_public_key) {
       if (err) {
+        console.log(err);
+
         Materialize.toast("An error occurred: " + err, TOAST_DURATION);
         Materialize.toast("Try refreshing the page.", TOAST_DURATION);
       }
@@ -76,6 +78,8 @@ window.App = {
 
         rsa.keygen(function(err, keypair) {
           if (err) {
+            console.log(err);
+
             Materialize.toast("An error occurred: " + err, TOAST_DURATION);
             Materialize.toast("Try refreshing the page.", TOAST_DURATION);
           }
@@ -92,6 +96,8 @@ window.App = {
             // Upload public key to the blockchain
             App.uploadPublicKey(account, pem_formats.publicKey, function (err) {
               if (err) {
+                console.log(err);
+
                 Materialize.toast("An error occurred: " + err, TOAST_DURATION);
                 Materialize.toast("Try refreshing the page.", TOAST_DURATION);
               }
