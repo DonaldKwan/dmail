@@ -183,7 +183,17 @@ window.App = {
 
     // TODO: Call smart contract
     // See https://github.com/trufflesuite/truffle-init-webpack/blob/master/app/javascripts/app.js
-
+    
+    var inst;
+    Dmail.deployed().then(function(instance) {
+      inst = instance;
+      return inst.storeKey(public_key);
+    }).then(function() {
+    }).catch(function(e) {
+      console.log(e);
+      self.setStatus("Error: see log.");
+    });
+    
     callback(null);
   }
 };
