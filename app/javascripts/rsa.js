@@ -31,9 +31,29 @@ function serialize(keypair) {
  */
 function deserialize(pem_formats) {
   return {
-    publicKey: forge.pki.publicKeyFromPem(pem_formats.publicKey),
-    privateKey: forge.pki.privateKeyFromPem(pem_formats.privateKey)
+    publicKey: deserialize_public_key(pem_formats.publicKey),
+    privateKey: deserialize_private_key(pem_formats.privateKey)
   }
+}
+
+/**
+ * Deserializes the public key individually.
+ *
+ * @param  {String} pem The public key in PEM format
+ * @return {Object}     Forge public key object
+ */
+function deserialize_public_key(pem) {
+  return forge.pki.publicKeyFromPem(pem);
+}
+
+/**
+ * Deserializes the private key individually.
+ *
+ * @param  {String} pem The private key in PEM format
+ * @return {Object}     Forge private key object
+ */
+function deserialize_private_key(pem) {
+  return forge.pki.privateKeyFromPem(pem);
 }
 
 /**
@@ -62,4 +82,4 @@ function encrypt(message, publicKey) {
   return publicKey.encrypt(bytes);
 }
 
-export { keygen, serialize, deserialize, decrypt, encrypt }
+export { keygen, serialize, deserialize, decrypt, encrypt, deserialize_public_key, deserialize_private_key }

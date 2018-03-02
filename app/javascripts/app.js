@@ -30,6 +30,7 @@ var account;
 
 // Global constants
 const TOAST_DURATION = 3000;
+const ERROR_TOAST_DURATION = 5000;
 
 window.App = {
 
@@ -65,10 +66,8 @@ window.App = {
 
     self.getPublicKeyPEM(account, function (err, pem_public_key) {
       if (err) {
+        Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
         console.log(err);
-
-        Materialize.toast("An error occurred: " + err, TOAST_DURATION);
-        Materialize.toast("Try refreshing the page.", TOAST_DURATION);
       }
       // Account has no public key on the blockchain
       else if (pem_public_key == undefined) {
@@ -78,10 +77,8 @@ window.App = {
 
         rsa.keygen(function(err, keypair) {
           if (err) {
+            Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
             console.log(err);
-
-            Materialize.toast("An error occurred: " + err, TOAST_DURATION);
-            Materialize.toast("Try refreshing the page.", TOAST_DURATION);
           }
           else {
             Materialize.toast("Uploading public key ...", TOAST_DURATION);
@@ -96,19 +93,17 @@ window.App = {
             // Upload public key to the blockchain
             App.uploadPublicKey(account, pem_formats.publicKey, function (err) {
               if (err) {
+                Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
                 console.log(err);
-
-                Materialize.toast("An error occurred: " + err, TOAST_DURATION);
-                Materialize.toast("Try refreshing the page.", TOAST_DURATION);
               }
               else {
                 Materialize.toast("Done!", TOAST_DURATION);
 
                 // Handle displays
-                $('#doing-keygen').addClass('hide');
-                $('#finished-keygen').removeClass('hide');
                 $('#display-private-key').text(pem_formats.privateKey);
                 $('#display-public-key').text(pem_formats.publicKey);
+                $('#doing-keygen').addClass('hide');
+                $('#finished-keygen').removeClass('hide');
               }
             });
           }
@@ -116,7 +111,6 @@ window.App = {
       }
       // Account has a public key on the blockchain
       else {
-        console.log("Public key:\n"+pem_public_key);
         self.open();
       }
     });
@@ -205,13 +199,92 @@ window.App = {
     }).catch(function(err) {
       callback(err);
     });
+  },
+
+  /**
+   * Sends a message in ciphertext to the receiver's address on the blockchain.
+   *
+   * @param  {Object}   sender_address      The sender's Ethereum address
+   * @param  {String}   sender_message      The message the sender wants to send to the receiver
+   * @param  {Object}   receiver_address    The receiver's Ethereum address
+   * @param  {Object}   receiver_public_key The receiver's forge public key
+   * @param  {Function} callback            A function taking an error (if upload was successful, error will be null)
+   */
+  uploadMessage: function(sender_address, sender_message, receiver_address, receiver_public_key, callback) {
+    var self = this;
+
+    var inst;
+    Dmail.deployed().then(function(instance) {
+      inst = instance;
+      var ciphertext = rsa.encrypt(sender_message, receiver_public_key);
+      return inst.sendMail(receiver_address, ciphertext, {from: sender_address});
+    }).then(function() {
+      callback(null);
+    }).catch(function(err) {
+      callback(err);
+    });
   }
 };
 
 $(document).ready(function() {
   // Associate buttons with JS
-  $('#saved-private-key').click(function() {
+  $('#setup-done-button').click(function() {
     App.open();
+  });
+  $('#message-form').submit(function(e) {
+    // Prevent page from refreshing
+    e.preventDefault();
+
+    // Collect all of the form's values
+    var values = {
+      recipient: $('#recipient').val(),
+      message: $('#message').val()
+    };
+
+    // Append 0x to front of Ethereum address if not there
+    if (values.recipient.length == 40) {
+      values.recipient = '0x' + values.recipient;
+    }
+
+    // Check recipient address
+    if (values.recipient.length !== 42) {
+      Materialize.toast("Please enter a valid recipient address!", TOAST_DURATION);
+      return;
+    }
+
+    // Check message
+    if (values.message.length == 0) {
+      Materialize.toast("Please enter a message!", TOAST_DURATION);
+      return;
+    }
+
+    Materialize.toast("Encrypting message ...", TOAST_DURATION);
+
+    // Get the public key of the user we want to send to
+    App.getPublicKeyPEM(values.recipient, function(err, pem) {
+      if (err) {
+          Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
+          console.log(err);
+      }
+      else {
+        var public_key = rsa.deserialize_public_key(pem);
+
+        Materialize.toast("Posting ciphertext to blockchain ...", TOAST_DURATION);
+
+        // Send a message to them using their own private key
+        App.uploadMessage(account, values.message, values.recipient, public_key, function(err) {
+          if (err) {
+            Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
+            console.log(err);
+          }
+          else {
+            Materialize.toast("Message sent!", TOAST_DURATION);
+            $('#recipient').val("");
+            $('#message').val("");
+          }
+        });
+      }
+    })
   });
 
   // Make page visible
