@@ -28,6 +28,9 @@ var Dmail = contract(dmail_artifacts);
 // The account of the current user (should equal the one MetaMask refers to)
 var account;
 
+// The private key associated with the account
+var account_private_key;
+
 // Global constants
 const TOAST_DURATION = 3000;
 const ERROR_TOAST_DURATION = 5000;
@@ -124,6 +127,22 @@ window.App = {
 
     $('#setup-mailbox').addClass('hide');
     $('#use-mailbox').removeClass('hide');
+
+    // Get the user's private key
+    App.getPrivateKey(account, function(err, private_key) {
+      if (err) {
+        Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
+        console.log(err);
+      }
+      else {
+        if (private_key == undefined) {
+          $('#private-key-modal').modal('open');
+        }
+        else {
+          account_private_key = private_key;
+        }
+      }
+    });
   },
 
   /**
@@ -154,10 +173,7 @@ window.App = {
 
   /**
    * Returns the private key corresponding to the provided Ethereum address.
-   * The function first checks the browser cache to see if a private key exists there. If a private key
-   * does it exist, it then checks to see if the private key's address corresponds to MetaMask's address.
-   * If no private key is found in the browser cache or a different private key is found, it asks the user
-   * to input the key in directly.
+   * Checks the browser's cookies to see if the user's private key is there and is associated with the given address.
    *
    * @param  {Object}   address  The ethereum address whose private key we want to retrieve
    * @param  {Function} callback A function taking an error and a private key (if successful, error will be null)
@@ -165,19 +181,13 @@ window.App = {
   getPrivateKey: function(address, callback) {
     var self = this;
 
-    var pem = undefined;
-
     // The user's account matches the saved address associated with the private key
     if (Cookies.get('address') == String(address)) {
-      pem = Cookies.get('privatekey');
+      callback(null, rsa.deserialize_private_key(Cookies.get('privatekey')))
     }
-
-    // Private key does not exist
-    if (pem == undefined) {
-      // TODO: Ask user to input their private key
+    else {
+      callback(null, undefined);
     }
-
-    callback(null, rsa.deserialize_private_key(pem));
   },
 
    /**
@@ -227,10 +237,17 @@ window.App = {
 };
 
 $(document).ready(function() {
+  // Register all modals
+  $('.modal').modal({
+    dismissible: false
+  });
+
+  // Transition from setup page to usage page
   $('#setup-done-button').click(function() {
     App.open();
   });
 
+  // Handles send mail submits
   $('#message-form').submit(function(e) {
     // Prevent page from refreshing
     e.preventDefault();
@@ -286,6 +303,25 @@ $(document).ready(function() {
         }
       }
     });
+  });
+
+  // Handles private key submits
+  $('#private-key-button').click(function() {
+    var pem = $("#private-key").val();
+    if (pem.length == 0) {
+      Materialize.toast("You did not enter your private key!", ERROR_TOAST_DURATION);
+      Materialize.toast("Your mailbox will not be loaded.", ERROR_TOAST_DURATION);
+    }
+    else {
+      try {
+        account_private_key = rsa.deserialize_private_key(pem);
+      }
+      catch (err) {
+        Materialize.toast("You entered an invalid private key!", ERROR_TOAST_DURATION);
+        Materialize.toast("Your mailbox will not be loaded.", ERROR_TOAST_DURATION);
+        console.log(err);
+      }
+    }
   });
 
   // Make page visible

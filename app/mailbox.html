@@ -164,31 +164,32 @@
           <div class="col s12">
             <h3 class="amber-text">Messages Received</h3>
 
-            <!-- Card specifying private key (removed once inputted) -->
-            <div class="row" id="private-key-card">
-              <div class="col s12">
-                <div class="card">
-                  <div class="card-content">
-                    <form id="private-key-form">
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <textarea class="materialize-textarea validate" id="private-key" type="text"></textarea>
-                          <label for="private-key">Private Key</label>
-                        </div>
-                      </div>
-                      <button class="btn waves-effect waves-light amber center" type="submit" form="private-key-form">Submit</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
             <!-- TODO: show list of messages -->
 
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Popup modal that displays if you haven't entered a private key -->
+    <div id="private-key-modal" class="modal modal-fixed-footer">
+      <div class="modal-content">
+        <h4>Enter Your Private Key</h4>
+        <p>Normally, your private key is stored in your browser's cookies, so it be automatically loaded. However, for some reason, your private key either cannot be found or does not match the address it was generated with. Because of this, you must enter in your private key manually.</p>
+        <p>You can proceed without entering a valid private key, but keep in mind then that your mailbox will not load. You may still send messages however.</p>
+        <br>
+        <form id="private-key-form">
+          <div class="row">
+            <div class="input-field col s12">
+              <textarea class="materialize-textarea validate" id="private-key" type="text"></textarea>
+              <label for="private-key">Private Key</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a id="private-key-button" class="modal-action modal-close waves-effect waves-green btn-flat ">Submit</a>
       </div>
     </div>
 
