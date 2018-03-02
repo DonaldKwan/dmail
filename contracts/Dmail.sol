@@ -9,21 +9,18 @@ contract Dmail {
     function storeKey(string publicKey) returns (bool success) {
     	//TODO: Add check to see if public key length is 437
         keyStore[msg.sender] = publicKey;
-        if (keyStore[msg.sender].length == publicKey.length){
-            return true;
-        }else{
-        	return false;
-        }
+        return true;
     }
     //send_mail(receiver_address,ciphertext,sender_address) will store ciphertext concatenated with sender_address as a value in a hashmap with the receiver_address as the key.
     function sendMail(address receiverAddress, string message) returns (bool success) {
         mailBoxes[receiverAddress].push(message);
-        uint end_idx = mailBoxes[receiverAddress].length -1;
+        /*uint end_idx = mailBoxes[receiverAddress].length -1;
         if ((mailBoxes[receiverAddress][end_idx]).length() ==  message.length){
             return true;
         }else{
         	return false;
-        }
+        }*/
+        return true;
         //TODO: append msg.sender as string
         //+string(msg.sender);
         
