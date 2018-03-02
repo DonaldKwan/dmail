@@ -116,6 +116,7 @@ window.App = {
       }
       // Account has a public key on the blockchain
       else {
+        console.log("Public key:\n"+pem_public_key);
         self.open();
       }
     });
@@ -141,12 +142,15 @@ window.App = {
   getPublicKeyPEM: function(address, callback) {
     var self = this;
 
-    var pem = undefined;
-
-    // TODO: Query the smart contract and retrieve the key in PEM format
-    // See https://github.com/trufflesuite/truffle-init-webpack/blob/master/app/javascripts/app.js
-
-    callback(null, pem);
+    var inst;
+    Dmail.deployed().then(function(instance) {
+      inst = instance;
+      return inst.getKey.call(address, {from: address});
+    }).then(function(value) {
+      callback(null, value.valueOf());
+    }).catch(function(err) {
+      callback(err, null);
+    });
   },
 
   /**
@@ -187,13 +191,10 @@ window.App = {
   uploadPublicKey: function(address, public_key, callback) {
     var self = this;
 
-    // TODO: Call smart contract
-    // See https://github.com/trufflesuite/truffle-init-webpack/blob/master/app/javascripts/app.js
-
     var inst;
     Dmail.deployed().then(function(instance) {
       inst = instance;
-      return inst.storeKey(public_key, {from:account});
+      return inst.putKey(public_key, {from: address});
     }).then(function() {
       callback(null);
     }).catch(function(err) {
