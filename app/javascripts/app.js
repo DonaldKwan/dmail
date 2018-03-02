@@ -64,13 +64,13 @@ window.App = {
     // Change screens (loading -> setup/use)
     $('#loading-mailbox').addClass('hide');
 
-    self.getPublicKeyPEM(account, function (err, pem_public_key) {
+    self.getPublicKey(account, function (err, public_key) {
       if (err) {
         Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
         console.log(err);
       }
       // Account has no public key on the blockchain
-      else if (pem_public_key == undefined) {
+      else if (public_key == undefined) {
         $('#setup-mailbox').removeClass('hide');
 
         Materialize.toast("Generating keys ...", TOAST_DURATION);
@@ -127,13 +127,13 @@ window.App = {
   },
 
   /**
-   * Returns the PEM of the public key corresponding to the provided Ethereum address.
-   * Queries the blockchain to retrieve the PEM.
+   * Returns the public key corresponding to the provided Ethereum address.
+   * Queries the blockchain to retrieve the PEM of the key and then converts it to a usable key object.
    *
    * @param  {Object}   address  The ethereum address whose public key we want to retrieve
-   * @param  {Function} callback A function taking an error and a public key PEM (if successful, error will be null)
+   * @param  {Function} callback A function taking an error and a public key (if successful, error will be null)
    */
-  getPublicKeyPEM: function(address, callback) {
+  getPublicKey: function(address, callback) {
     var self = this;
 
     var inst;
@@ -145,7 +145,7 @@ window.App = {
         callback(null, undefined);
       }
       else {
-        callback(null, value.valueOf());
+        callback(null, rsa.deserialize_public_key(value.valueOf()));
       }
     }).catch(function(err) {
       callback(err, null);
@@ -153,16 +153,16 @@ window.App = {
   },
 
   /**
-   * Returns the PEM of the private key.
+   * Returns the private key corresponding to the provided Ethereum address.
    * The function first checks the browser cache to see if a private key exists there. If a private key
    * does it exist, it then checks to see if the private key's address corresponds to MetaMask's address.
    * If no private key is found in the browser cache or a different private key is found, it asks the user
    * to input the key in directly.
    *
    * @param  {Object}   address  The ethereum address whose private key we want to retrieve
-   * @param  {Function} callback A function taking an error and a private key PEM (if successful, error will be null)
+   * @param  {Function} callback A function taking an error and a private key (if successful, error will be null)
    */
-  getPrivateKeyPEM: function(address, callback) {
+  getPrivateKey: function(address, callback) {
     var self = this;
 
     var pem = undefined;
@@ -177,7 +177,7 @@ window.App = {
       // TODO: Ask user to input their private key
     }
 
-    callback(null, pem);
+    callback(null, rsa.deserialize_private_key(pem));
   },
 
    /**
@@ -227,10 +227,10 @@ window.App = {
 };
 
 $(document).ready(function() {
-  // Associate buttons with JS
   $('#setup-done-button').click(function() {
     App.open();
   });
+
   $('#message-form').submit(function(e) {
     // Prevent page from refreshing
     e.preventDefault();
@@ -258,33 +258,34 @@ $(document).ready(function() {
       return;
     }
 
-    Materialize.toast("Encrypting message ...", TOAST_DURATION);
-
     // Get the public key of the user we want to send to
-    App.getPublicKeyPEM(values.recipient, function(err, pem) {
+    App.getPublicKey(values.recipient, function(err, public_key) {
       if (err) {
           Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
           console.log(err);
       }
       else {
-        var public_key = rsa.deserialize_public_key(pem);
+        if (public_key == undefined) {
+          Materialize.toast("That person has not uploaded his/her public key.", ERROR_TOAST_DURATION);
+        }
+        else {
+          Materialize.toast("Encrypting & sending message ...", TOAST_DURATION);
 
-        Materialize.toast("Posting ciphertext to blockchain ...", TOAST_DURATION);
-
-        // Send a message to them using their own private key
-        App.uploadMessage(account, values.message, values.recipient, public_key, function(err) {
-          if (err) {
-            Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-            console.log(err);
-          }
-          else {
-            Materialize.toast("Message sent!", TOAST_DURATION);
-            $('#recipient').val("");
-            $('#message').val("");
-          }
-        });
+          // Send a message to them using their own private key
+          App.uploadMessage(account, values.message, values.recipient, public_key, function(err) {
+            if (err) {
+              Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
+              console.log(err);
+            }
+            else {
+              Materialize.toast("Message sent!", TOAST_DURATION);
+              $('#recipient').val("");
+              $('#message').val("");
+            }
+          });
+        }
       }
-    })
+    });
   });
 
   // Make page visible
