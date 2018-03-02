@@ -8,17 +8,26 @@ contract Dmail {
         return keys[receiver];
     }
 
-    function putKey(string publicKey) public {
+    function setKey(string publicKey) public {
         keys[msg.sender] = publicKey;
     }
 
     /*
-    function getMail(string message) public constant returns (string[]) {
+    // String arrays cannot be returned via Solidity (2D arrays via general)
+    function getMail() public constant returns (string[]) {
         return mailboxes[msg.sender];
     }
     */
 
-    function putMail(address receiver, string message) public {
+   function getMailByIndex(uint index) public constant returns (string) {
+        return mailboxes[msg.sender][index];
+   }
+
+   function getMailAmount() public constant returns (uint) {
+        return mailboxes[msg.sender].length;
+   }
+
+    function sendMail(address receiver, string message) public {
         mailboxes[receiver].push(message);
     }
 }

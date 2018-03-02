@@ -199,7 +199,7 @@ window.App = {
     var inst;
     Dmail.deployed().then(function(instance) {
       inst = instance;
-      return inst.putKey(public_key, {from: address});
+      return inst.setKey(public_key, {from: address});
     }).then(function() {
       callback(null);
     }).catch(function(err) {
