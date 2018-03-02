@@ -147,7 +147,12 @@ window.App = {
       inst = instance;
       return inst.getKey.call(address, {from: address});
     }).then(function(value) {
-      callback(null, value.valueOf());
+      if (value.valueOf().length == 0) {
+        callback(null, undefined);
+      }
+      else {
+        callback(null, value.valueOf());
+      }
     }).catch(function(err) {
       callback(err, null);
     });
