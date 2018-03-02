@@ -193,7 +193,7 @@ window.App = {
     var inst;
     Dmail.deployed().then(function(instance) {
       inst = instance;
-      return inst.storeKey(public_key);
+      return inst.storeKey(public_key, {from:account});
     }).then(function() {
     }).catch(function(e) {
       console.log(e);
