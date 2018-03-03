@@ -1,5 +1,6 @@
-// Import RSA functions.
+// Import encryption functions.
 import * as rsa from "./rsa.js";
+import * as aes from "./aes.js";
 
 // Import cookies (for auto-saving private key)
 import Cookies from 'js-cookie';
@@ -226,8 +227,20 @@ window.App = {
     var inst;
     Dmail.deployed().then(function(instance) {
       inst = instance;
-      var ciphertext = rsa.encrypt(sender_message, receiver_public_key);
-      return inst.sendMail(receiver_address, ciphertext, {from: sender_address});
+
+      // Generate AES keys
+      var aes_keygen = aes.keygen();
+      var aes_key = aes_keygen.key;
+      var aes_iv = aes_keygen.iv;
+
+      // Encrypt message
+      var ciphertext = aes.encrypt(sender_message, aes_key, aes_iv);
+
+      // Encrypt AES key
+      var aes_encrypted_key = rsa.encrypt(aes_key, receiver_public_key);
+
+      // Upload both to the blockchain
+      return inst.sendMail(receiver_address, ciphertext, aes_encrypted_key, aes_iv, {from: sender_address});
     }).then(function() {
       callback(null);
     }).catch(function(err) {

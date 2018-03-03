@@ -1,10 +1,9 @@
 var forge = require('node-forge');
 
 /**
- * Generates the keys  needed for RSA.
+ * Generates the keys needed for RSA. ASYNCHRONOUS.
  *
  * @param  {Function} callback A callback function taking in a keypair as a parameter
- * @return {Object}            The user's keypair
  */
 function keygen(callback) {
   forge.pki.rsa.generateKeyPair({bits: 2048, workers: 2}, callback);
@@ -21,19 +20,6 @@ function serialize(keypair) {
     publicKey: forge.pki.publicKeyToPem(keypair.publicKey),
     privateKey: forge.pki.privateKeyToPem(keypair.privateKey),
   };
-}
-
-/**
- * Deserializes keys in PEM format to their original forge key objects.
- *
- * @param  {String} pem_formats The keypair in PEM format
- * @return {Object}             The forge keypair
- */
-function deserialize(pem_formats) {
-  return {
-    publicKey: deserialize_public_key(pem_formats.publicKey),
-    privateKey: deserialize_private_key(pem_formats.privateKey)
-  }
 }
 
 /**
@@ -82,4 +68,4 @@ function encrypt(message, publicKey) {
   return publicKey.encrypt(bytes);
 }
 
-export { keygen, serialize, deserialize, decrypt, encrypt, deserialize_public_key, deserialize_private_key }
+export { keygen, decrypt, encrypt, serialize, deserialize_public_key, deserialize_private_key }
