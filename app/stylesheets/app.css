@@ -23,3 +23,8 @@ main {
 .confirm-button {
   margin-top: 3em;
 }
+
+.card-content{
+	overflow: auto;
+	word-break:break-all;
+}
