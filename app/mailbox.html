@@ -95,7 +95,11 @@
             <p>Copy this and store it somewhere safe. Your key is automatically stored in the browser cache, but if the cache is reset, you will have to input this again to read your messages.</p>
             <div class="card horizontal">
               <div class="card-content">
-                <p id="display-private-key"></p>
+                <div class="row">
+                  <div class="col s12">
+                    <p id="display-private-key" class="resizable-text"></p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -106,7 +110,11 @@
             <p>This key has been stored on the blockchain. No need to save it! When people want to send messages to you, they will use your public key to encrypt messages meant for you.</p>
             <div class="card horizontal">
               <div class="card-content">
-                <p onmousedown='return false;' onselectstart='return false;' id="display-public-key"></p>
+                <div class="row">
+                  <div class="col s12">
+                    <p onmousedown='return false;' onselectstart='return false;' id="display-public-key" class="resizable-text"></p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

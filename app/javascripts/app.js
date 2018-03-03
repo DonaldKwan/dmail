@@ -104,8 +104,8 @@ window.App = {
                 Materialize.toast("Done!", TOAST_DURATION);
 
                 // Handle displays
-                $('#display-private-key').text(pem_formats.privateKey);
-                $('#display-public-key').text(pem_formats.publicKey);
+                $('#display-private-key').html(pem_formats.privateKey.split('\n').join('<br>'));
+                $('#display-public-key').html(pem_formats.publicKey.split('\n').join('<br>'));
                 $('#doing-keygen').addClass('hide');
                 $('#finished-keygen').removeClass('hide');
               }
