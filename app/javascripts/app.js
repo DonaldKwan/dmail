@@ -92,10 +92,6 @@ window.App = {
             // Serialize keypair
             var pem_formats = rsa.serialize(keypair);
 
-            // Save private key to cookies
-            Cookies.set('address', account);
-            Cookies.set('privatekey', pem_formats.privateKey);
-
             // Upload public key to the blockchain
             App.uploadPublicKey(account, pem_formats.publicKey, function (err) {
               if (err) {
@@ -103,6 +99,10 @@ window.App = {
                 console.error(err);
               }
               else {
+                // Save private key to cookies
+                Cookies.set('address', account);
+                Cookies.set('privatekey', pem_formats.privateKey);
+
                 Materialize.toast("Done!", TOAST_DURATION);
 
                 // Handle displays
