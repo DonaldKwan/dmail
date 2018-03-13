@@ -185,7 +185,31 @@ window.App = {
       inst = instance;
       return inst.getMailCount.call({from: address});
     }).then(function(value) {
-      callback(null, value);
+      var mail = [];
+      App.getMailByIndex(address, private_key, mail, 0, value.value, callback);
+    }).catch(function(err) {
+      callback(err, null);
+    });
+  },
+
+  getMailByIndex: function(address, private_key, mail, index, count, callback){
+    console.log(mail);
+    console.log(index);
+    console.log(count);
+    console.log("........");
+    if(index === count){
+      callback(null, mail);
+      return;
+    }     
+
+    var self = this;
+    var inst;
+    Dmail.deployed().then(function(instance) {
+      inst = instance;
+      return inst.getMail.call(index, {from: address});
+    }).then(function(value) {
+      mail.push(value);
+      App.getMailByIndex(address, private_key, mail, index + 1, count, callback);
     }).catch(function(err) {
       callback(err, null);
     });

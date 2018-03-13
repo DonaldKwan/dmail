@@ -23,21 +23,11 @@ contract Dmail {
         return mailboxes[msg.sender].length;
     }
 
-    function getMailMessage(uint index) public constant returns (bytes) {
-        return mailboxes[msg.sender][index].message;
+    function getMail(uint index) public constant returns (bytes, bytes, bytes, address) {
+        var mail = mailboxes[msg.sender][index];
+        return (mail.message, mail.aes_key, mail.aes_iv, mail.sender);
     }
 
-    function getMailAESKey(uint index) public constant returns (bytes) {
-        return mailboxes[msg.sender][index].aes_key;
-    }
-
-    function getMailAESIv(uint index) public constant returns (bytes) {
-        return mailboxes[msg.sender][index].aes_iv;
-    }
-
-    function getMailSender(uint index) public constant returns (address) {
-        return mailboxes[msg.sender][index].sender;
-    }
 
     function sendMail(address receiver, bytes message, bytes aes_key, bytes aes_iv) public {
         mailboxes[receiver].push(Mail({
