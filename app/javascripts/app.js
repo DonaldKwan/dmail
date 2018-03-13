@@ -183,7 +183,7 @@ window.App = {
     var inst;
     Dmail.deployed().then(function(instance) {
       inst = instance;
-      return inst.getMail.call({from: address});
+      return inst.getMailCount.call({from: address});
     }).then(function(value) {
       callback(null, value);
     }).catch(function(err) {
