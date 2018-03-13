@@ -19,8 +19,24 @@ contract Dmail {
         keys[msg.sender] = publicKey;
     }
 
-    function getMail() public constant returns (Mail[]) {
-        return mailboxes[msg.sender];
+    function getMailCount() public constant returns (uint) {
+        return mailboxes[msg.sender].length;
+    }
+
+    function getMailMessage(uint index) public constant returns (bytes) {
+        return mailboxes[msg.sender][index].message;
+    }
+
+    function getMailAESKey(uint index) public constant returns (bytes) {
+        return mailboxes[msg.sender][index].aes_key;
+    }
+
+    function getMailAESIv(uint index) public constant returns (bytes) {
+        return mailboxes[msg.sender][index].aes_iv;
+    }
+
+    function getMailSender(uint index) public constant returns (address) {
+        return mailboxes[msg.sender][index].sender;
     }
 
     function sendMail(address receiver, bytes message, bytes aes_key, bytes aes_iv) public {
