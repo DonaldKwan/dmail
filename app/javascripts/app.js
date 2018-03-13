@@ -55,6 +55,8 @@ window.App = {
     // Get the user's account.
     account = web3.eth.accounts[0];
 
+    console.log("Account is "+account);
+
     // Disable mailbox if we don't have a valid account
     if (account === undefined) {
       $('#loading-mailbox').addClass('hide');
@@ -71,7 +73,7 @@ window.App = {
     self.getPublicKey(account, function (err, public_key) {
       if (err) {
         Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-        console.log(err);
+        console.error(err);
       }
       // Account has no public key on the blockchain
       else if (public_key == undefined) {
@@ -82,7 +84,7 @@ window.App = {
         rsa.keygen(function(err, keypair) {
           if (err) {
             Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-            console.log(err);
+            console.error(err);
           }
           else {
             Materialize.toast("Uploading public key ...", TOAST_DURATION);
@@ -90,22 +92,22 @@ window.App = {
             // Serialize keypair
             var pem_formats = rsa.serialize(keypair);
 
-            // Save private key to cookies
-            Cookies.set('address', account);
-            Cookies.set('privatekey', pem_formats.privateKey);
-
             // Upload public key to the blockchain
             App.uploadPublicKey(account, pem_formats.publicKey, function (err) {
               if (err) {
                 Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-                console.log(err);
+                console.error(err);
               }
               else {
+                // Save private key to cookies
+                Cookies.set('address', account);
+                Cookies.set('privatekey', pem_formats.privateKey);
+
                 Materialize.toast("Done!", TOAST_DURATION);
 
                 // Handle displays
-                $('#display-private-key').text(pem_formats.privateKey);
-                $('#display-public-key').text(pem_formats.publicKey);
+                $('#display-private-key').html(pem_formats.privateKey.split('\n').join('<br>'));
+                $('#display-public-key').html(pem_formats.publicKey.split('\n').join('<br>'));
                 $('#doing-keygen').addClass('hide');
                 $('#finished-keygen').removeClass('hide');
               }
@@ -133,7 +135,7 @@ window.App = {
     App.getPrivateKey(account, function(err, private_key) {
       if (err) {
         Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-        console.log(err);
+        console.error(err);
       }
       else {
         if (private_key == undefined) {
@@ -309,7 +311,7 @@ $(document).ready(function() {
     App.getPublicKey(values.recipient, function(err, public_key) {
       if (err) {
           Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-          console.log(err);
+          console.error(err);
       }
       else {
         if (public_key == undefined) {
@@ -322,7 +324,7 @@ $(document).ready(function() {
           App.uploadMessage(account, values.message, values.recipient, public_key, function(err) {
             if (err) {
               Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
-              console.log(err);
+              console.error(err);
             }
             else {
               Materialize.toast("Message sent!", TOAST_DURATION);
@@ -349,7 +351,7 @@ $(document).ready(function() {
       catch (err) {
         Materialize.toast("You entered an invalid private key!", ERROR_TOAST_DURATION);
         Materialize.toast("Your mailbox will not be loaded.", ERROR_TOAST_DURATION);
-        console.log(err);
+        console.error(err);
       }
     }
   });

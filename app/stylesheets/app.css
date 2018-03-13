@@ -24,7 +24,7 @@ main {
   margin-top: 3em;
 }
 
-.card-content{
+.resizable-card-content {
 	overflow: auto;
-	word-break:break-all;
+	word-break: break-all;
 }
