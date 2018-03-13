@@ -141,10 +141,14 @@ window.App = {
         }
         else {
           account_private_key = private_key;
+          App.getMail(account, private_key, function(err, value){
+              console.log(value);
+          })
         }
       }
     });
   },
+
 
   /**
    * Returns the public key corresponding to the provided Ethereum address.
@@ -154,7 +158,7 @@ window.App = {
    * @param  {Function} callback A function taking an error and a public key (if successful, error will be null)
    */
   getPublicKey: function(address, callback) {
-    var self = this;
+   var self = this;
 
     var inst;
     Dmail.deployed().then(function(instance) {
@@ -167,6 +171,19 @@ window.App = {
       else {
         callback(null, rsa.deserialize_public_key(value.valueOf()));
       }
+    }).catch(function(err) {
+      callback(err, null);
+    });
+  },
+
+  getMail: function(address, private_key, callback) {
+    var self = this;
+    var inst;
+    Dmail.deployed().then(function(instance) {
+      inst = instance;
+      return inst.getMail.call({from: address});
+    }).then(function(value) {
+      callback(null, value);
     }).catch(function(err) {
       callback(err, null);
     });
