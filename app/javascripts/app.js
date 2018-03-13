@@ -186,13 +186,15 @@ window.App = {
       return inst.getMailCount.call({from: address});
     }).then(function(value) {
       var mail = [];
-      App.getMailByIndex(address, private_key, mail, 0, value.value, callback);
+      App.getMailByIndex(address, private_key, mail, 0, value, callback);
     }).catch(function(err) {
       callback(err, null);
     });
   },
 
   getMailByIndex: function(address, private_key, mail, index, count, callback){
+    console.log("Downloading " + index + " out of " + count + " mail ...");
+
     if(index === count){
       callback(null, mail);
       return;
@@ -204,17 +206,19 @@ window.App = {
       inst = instance;
       return inst.getMail.call(index, {from: address});
     }).then(function(value) {
+      console.log(mail);
       var encrypted_message = value[0];
       var encrypted_aes_key = value[1];
       var aes_iv = value[2];
       var sender = value[3];
-      var aes_key = rsa.decrypt(encrypted_aes_key, private_key);
-      var message = aes.decrypt(encrypted_message, aes_key, aes_iv);
+      var aes_key = rsa.decrypt(forge.util.hexToBytes(encrypted_aes_key), private_key);
+      var message = aes.decrypt(forge.util.hexToBytes(encrypted_message), aes_key, forge.util.hexToBytes(aes_iv));
 
-      mail.push([
+      mail.push({
         message:message,
         sender:sender
-      ]);
+      });
+      console.log(mail);
       App.getMailByIndex(address, private_key, mail, index + 1, count, callback);
     }).catch(function(err) {
       callback(err, null);
