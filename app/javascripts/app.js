@@ -193,10 +193,6 @@ window.App = {
   },
 
   getMailByIndex: function(address, private_key, mail, index, count, callback){
-    console.log(mail);
-    console.log(index);
-    console.log(count);
-    console.log("........");
     if(index === count){
       callback(null, mail);
       return;
@@ -208,7 +204,17 @@ window.App = {
       inst = instance;
       return inst.getMail.call(index, {from: address});
     }).then(function(value) {
-      mail.push(value);
+      var encrypted_message = value[0];
+      var encrypted_aes_key = value[1];
+      var aes_iv = value[2];
+      var sender = value[3];
+      var aes_key = rsa.decrypt(encrypted_aes_key, private_key);
+      var message = aes.decrypt(encrypted_message, aes_key, aes_iv);
+
+      mail.push([
+        message:message,
+        sender:sender
+      ]);
       App.getMailByIndex(address, private_key, mail, index + 1, count, callback);
     }).catch(function(err) {
       callback(err, null);
