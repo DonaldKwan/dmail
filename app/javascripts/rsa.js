@@ -51,8 +51,7 @@ function deserialize_private_key(pem) {
  * @return {String}            The original message written by the sender
  */
 function decrypt(bytes, privateKey) {
-  var decrypted = privateKey.decrypt(bytes);
-  return forge.util.decodeUtf8(decrypted);
+  return privateKey.decrypt(bytes);
 }
 
 /**
@@ -64,8 +63,7 @@ function decrypt(bytes, privateKey) {
  * @return {Byte[]}           The original
  */
 function encrypt(message, publicKey) {
-  var bytes = forge.util.encodeUtf8(message);
-  return publicKey.encrypt(bytes);
+  return publicKey.encrypt(message);
 }
 
 export { keygen, decrypt, encrypt, serialize, deserialize_public_key, deserialize_private_key }

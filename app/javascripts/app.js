@@ -1,6 +1,7 @@
 // Import encryption functions.
 import * as rsa from "./rsa.js";
 import * as aes from "./aes.js";
+import * as base64 from "./base64.js";
 
 // Import cookies (for auto-saving private key)
 import Cookies from 'js-cookie';
@@ -143,8 +144,8 @@ window.App = {
         }
         else {
           account_private_key = private_key;
-          App.getMail(account, private_key, function(err, value){
-              console.log(value);
+          App.getMail(account, private_key, function(err, mail){
+            // TODO: Display mail here
           })
         }
       }
@@ -206,19 +207,21 @@ window.App = {
       inst = instance;
       return inst.getMail.call(index, {from: address});
     }).then(function(value) {
-      console.log(mail);
-      var encrypted_message = atob(value[0]);
-      var encrypted_aes_key = atob(value[1]);
-      var aes_iv = atob(value[2]);
+      console.log("Downloaded: "+value);
+      var encrypted_message = base64.decode(value[0]);
+      var encrypted_aes_key = base64.decode(value[1]);
+      var aes_iv = base64.decode(value[2]);
       var sender = value[3];
       var aes_key = rsa.decrypt(encrypted_aes_key, private_key);
-      var message = aes.decrypt(encrypted_message, aes_key, forge.util.hexToBytes(aes_iv));
+      console.log("Key: "+aes_key);
+      var message = aes.decrypt(encrypted_message, aes_key, aes_iv);
+      console.log("Message: "+aes_key);
 
       mail.push({
-        message:message,
-        sender:sender
+        message: message,
+        sender: sender
       });
-      console.log(mail);
+
       App.getMailByIndex(address, private_key, mail, index + 1, count, callback);
     }).catch(function(err) {
       callback(err, null);
@@ -293,7 +296,11 @@ window.App = {
       var aes_encrypted_key = rsa.encrypt(aes_key, receiver_public_key);
 
       // Upload both to the blockchain
-      return inst.sendMail(receiver_address, btoa(ciphertext), btoa(aes_encrypted_key), btoa(aes_iv), {from: sender_address});
+      return inst.sendMail(receiver_address,
+        base64.encode(ciphertext),
+        base64.encode(aes_encrypted_key),
+        base64.encode(aes_iv),
+        {from: sender_address});
     }).then(function() {
       callback(null);
     }).catch(function(err) {
