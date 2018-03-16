@@ -198,7 +198,7 @@ window.App = {
     if(index === count){
       callback(null, mail);
       return;
-    }     
+    }
 
     var self = this;
     var inst;
@@ -207,12 +207,12 @@ window.App = {
       return inst.getMail.call(index, {from: address});
     }).then(function(value) {
       console.log(mail);
-      var encrypted_message = value[0];
-      var encrypted_aes_key = value[1];
-      var aes_iv = value[2];
+      var encrypted_message = atob(value[0]);
+      var encrypted_aes_key = atob(value[1]);
+      var aes_iv = atob(value[2]);
       var sender = value[3];
-      var aes_key = rsa.decrypt(forge.util.hexToBytes(encrypted_aes_key), private_key);
-      var message = aes.decrypt(forge.util.hexToBytes(encrypted_message), aes_key, forge.util.hexToBytes(aes_iv));
+      var aes_key = rsa.decrypt(encrypted_aes_key, private_key);
+      var message = aes.decrypt(encrypted_message, aes_key, forge.util.hexToBytes(aes_iv));
 
       mail.push({
         message:message,
@@ -293,7 +293,7 @@ window.App = {
       var aes_encrypted_key = rsa.encrypt(aes_key, receiver_public_key);
 
       // Upload both to the blockchain
-      return inst.sendMail(receiver_address, ciphertext, aes_encrypted_key, aes_iv, {from: sender_address});
+      return inst.sendMail(receiver_address, btoa(ciphertext), btoa(aes_encrypted_key), btoa(aes_iv), {from: sender_address});
     }).then(function() {
       callback(null);
     }).catch(function(err) {
