@@ -183,6 +183,15 @@ window.App = {
     });
   },
 
+  /**
+   * Returns the decrypted mail that the provided Ethereum address owns.
+   * Queries the blockchain to retrieve the number of mail a user owns and then incrementally fetches
+   * the actual messages.
+   *
+   * @param  {Object}   address     The ethereum address whose mail we want to retrieve
+   * @param  {Object}   private_key The private key used to decrypt each individual mail
+   * @param  {Function} callback    A function taking an error and mail array (if successful, error will null)
+   */
   getMail: function(address, private_key, callback) {
     var self = this;
     var inst;
@@ -197,6 +206,17 @@ window.App = {
     });
   },
 
+  /**
+   * Performs tail recursion in order to incrementally load a user's mail. This is done because
+   * Solidity does not support array returns.
+   *
+   * @param  {Object}   address     The ethereum address whose mail we want to retrieve
+   * @param  {Object}   private_key The private key used to decrypt each individual mail
+   * @param  {Object[]} mail        An array of message/sender objects, each representing decrypted mail sent to the user
+   * @param  {Number}   index       The index of the mail we want to download
+   * @param  {Number}   count       The total amount of mail the user possesses
+   * @return {Function} callback    A function taking an error and mail array (if successful, error will null)
+   */
   getMailByIndex: function(address, private_key, mail, index, count, callback){
     if(index == count){
       callback(null, mail);
