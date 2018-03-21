@@ -30,9 +30,6 @@ var Dmail = contract(dmail_artifacts);
 // The account of the current user (should equal the one MetaMask refers to)
 var account;
 
-// The private key associated with the account
-var account_private_key;
-
 // Global constants
 const TOAST_DURATION = 3000;
 const ERROR_TOAST_DURATION = 5000;
@@ -55,8 +52,6 @@ window.App = {
 
     // Get the user's account.
     account = web3.eth.accounts[0];
-
-    console.log("Account is "+account);
 
     // Disable mailbox if we don't have a valid account
     if (account === undefined) {
@@ -143,15 +138,24 @@ window.App = {
           $('#private-key-modal').modal('open');
         }
         else {
-          account_private_key = private_key;
-          App.getMail(account, private_key, function(err, mail){
-            // TODO: Display mail here
-          })
+          App.openMail(private_key);
         }
       }
     });
   },
 
+  /**
+   * Downloads any mail that the user has from the blockchain and then displays it on the user's mailbox page.
+   *
+   * @param  {Object} private_key The user's private key as a Forge object
+   */
+  openMail: function(private_key) {
+    App.getMail(account, private_key, function(err, mail){
+      // TODO: Display mail here
+      console.log("User's mail: ")
+      console.log(mail);
+    });
+  },
 
   /**
    * Returns the public key corresponding to the provided Ethereum address.
@@ -194,9 +198,7 @@ window.App = {
   },
 
   getMailByIndex: function(address, private_key, mail, index, count, callback){
-    console.log("Downloading " + index + " out of " + count + " mail ...");
-
-    if(index === count){
+    if(index == count){
       callback(null, mail);
       return;
     }
@@ -207,15 +209,13 @@ window.App = {
       inst = instance;
       return inst.getMail.call(index, {from: address});
     }).then(function(value) {
-      console.log("Downloaded: "+value);
-      var encrypted_message = base64.decode(value[0]);
+      var ciphertext = base64.decode(value[0]);
       var encrypted_aes_key = base64.decode(value[1]);
       var aes_iv = base64.decode(value[2]);
       var sender = value[3];
       var aes_key = rsa.decrypt(encrypted_aes_key, private_key);
-      console.log("Key: "+aes_key);
-      var message = aes.decrypt(encrypted_message, aes_key, aes_iv);
-      console.log("Message: "+aes_key);
+
+      var message = aes.decrypt(ciphertext, aes_key, aes_iv);
 
       mail.push({
         message: message,
@@ -387,7 +387,8 @@ $(document).ready(function() {
     }
     else {
       try {
-        account_private_key = rsa.deserialize_private_key(pem);
+        var private_key = rsa.deserialize_private_key(pem);
+        App.openMail(private_key);
       }
       catch (err) {
         Materialize.toast("You entered an invalid private key!", ERROR_TOAST_DURATION);

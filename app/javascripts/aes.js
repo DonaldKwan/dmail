@@ -46,7 +46,7 @@ function decrypt(bytes, key, iv) {
   decipher.start({
     iv: iv
   });
-  decipher.update(bytes);
+  decipher.update(forge.util.createBuffer(bytes));
   decipher.finish();
   return decipher.output.getBytes();
 }
