@@ -1,5 +1,6 @@
-// Development configuration for webpack builds
+// Production configuration for webpack builds
 var path = require('path');
+var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -14,7 +15,11 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
       { from: './app/mailbox.html', to: "mailbox/index.html" }
-    ])
+    ]),
+    new webpack.optimize.CommonsChunkPlugin('common'),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin()
   ],
   module: {
     rules: [

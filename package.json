@@ -1,18 +1,24 @@
 {
-  "name": "truffle-init-webpack",
-  "version": "0.0.2",
-  "description": "Frontend example using truffle v3",
+  "name": "Dmail",
+  "version": "1.0.0",
+  "description": "Secure, decentralized email via Ethereum",
   "scripts": {
-    "lint": "eslint ./",
     "build": "webpack",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "start": "webpack-dev-server",
+    "heroku-postbuild": "webpack -p --config ./webpack.production.config.js --progress",
+    "lint": "eslint ./"
   },
-  "author": "Douglas von Kohorn",
+  "contributors": [
+    "David Hacker",
+    "Donald Kwan",
+    "Hannah Hsu",
+    "Holly Ham"
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
-    "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.6.1",
@@ -20,12 +26,6 @@
     "babel-register": "^6.22.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
-    "eslint": "^3.14.0",
-    "eslint-config-standard": "^6.0.0",
-    "eslint-plugin-babel": "^4.0.0",
-    "eslint-plugin-mocha": "^4.8.0",
-    "eslint-plugin-promise": "^3.0.0",
-    "eslint-plugin-standard": "^2.0.0",
     "file-loader": "^1.1.8",
     "html-webpack-plugin": "^2.28.0",
     "json-loader": "^0.5.4",
@@ -52,5 +52,8 @@
   "bugs": {
     "url": "https://github.com/UCSDTCT/Dmail/issues"
   },
-  "homepage": "https://github.com/UCSDTCT/Dmail#readme"
+  "homepage": "https://github.com/UCSDTCT/Dmail",
+  "babel": {
+    "presets": ["env"]
+  }
 }
