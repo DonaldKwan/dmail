@@ -151,7 +151,6 @@ window.App = {
    */
   openMail: function(private_key) {
     App.getMail(account, private_key, function(err, mail){
-      // TODO: Display mail here
       var html = "<table><tr><th>Message</th><th>Sender</th>";
       for(var i=0; i<mail.length; i++){
         html += "<tr>";
