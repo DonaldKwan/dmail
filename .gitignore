@@ -1,4 +1,8 @@
+# Webpack and Truffle build files
 contracts/.placeholder
 test/.placeholder
 build
 node_modules
+
+# Vim files
+*.swp
