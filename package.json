@@ -34,7 +34,7 @@
     "url-loader": "^0.6.2",
     "web3": "^0.20.0",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.3.0"
+    "webpack-dev-server": "^2.11.2"
   },
   "dependencies": {
     "ganache-cli": "^6.0.3",
@@ -43,5 +43,14 @@
     "materialize-css": "^0.100.2",
     "materialize-loader": "^2.0.2",
     "node-forge": "^0.7.1"
-  }
+  },
+  "main": "truffle-config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UCSDTCT/Dmail.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UCSDTCT/Dmail/issues"
+  },
+  "homepage": "https://github.com/UCSDTCT/Dmail#readme"
 }

@@ -152,6 +152,15 @@ window.App = {
   openMail: function(private_key) {
     App.getMail(account, private_key, function(err, mail){
       // TODO: Display mail here
+      var html = "<table><tr><th>Message</th><th>Sender</th>";
+      for(var i=0; i<mail.length; i++){
+        html += "<tr>";
+        html+="<td>"+mail[i].message+"</td>";
+        html+="<td>"+mail[i].sender+"</td>";
+        html+="</tr>";
+      }
+      html+="</table>";
+      document.getElementById("received-mail").innerHTML = html;
       console.log("User's mail: ")
       console.log(mail);
     });

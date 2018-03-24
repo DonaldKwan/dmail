@@ -28,3 +28,15 @@ main {
 	overflow: auto;
 	word-break: break-all;
 }
+
+#received-mail table{
+    border-collapse: collapse;
+}
+#received-mail td{
+    border: 1px solid #dddddd;
+    padding: 20px;
+}
+#received-mail th{
+    border: 1px solid #dddddd;
+    padding: 10px;
+}
