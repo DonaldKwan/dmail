@@ -6,8 +6,7 @@
     "build": "webpack",
     "dev": "webpack-dev-server",
     "start": "webpack-dev-server",
-    "heroku-postbuild": "webpack -p --config ./webpack.production.config.js --progress",
-    "lint": "eslint ./"
+    "heroku-postbuild": "webpack -p --config ./webpack.production.config.js --progress"
   },
   "contributors": [
     "David Hacker",
