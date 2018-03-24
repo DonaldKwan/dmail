@@ -151,7 +151,7 @@ window.App = {
    */
   openMail: function(private_key) {
     App.getMail(account, private_key, function(err, mail){
-      var html = "<table><tr><th>Message</th><th>Sender</th>";
+      var html = "<table><tr><th>Message</th><th>Sender</th></tr>";
       for(var i=0; i<mail.length; i++){
         html += "<tr>";
         html+="<td>"+mail[i].message+"</td>";
