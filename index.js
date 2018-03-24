@@ -7,14 +7,6 @@ var app = express();
 // Use the 'build' directory as the public static folder
 app.use(express.static(path.join(__dirname, 'build')));
 
-// Configure routes to omit '.html' suffixes
-app.get('/', function(request, response) {
-  response.sendFile('index.html');
-});
-app.get('/mailbox', function(request, response) {
-  response.sendFile('mailbox/index.html');
-});
-
 // Set port & listen for incoming HTTP requests
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), function() {

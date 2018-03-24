@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Secure, decentralized email via Ethereum",
   "scripts": {
-    "build": "webpack",
+    "build-dev": "webpack --progress",
+    "build-production": "webpack -p --config ./webpack.production.config.js --progress",
     "dev": "webpack-dev-server",
     "start": "node index.js",
     "heroku-postbuild": "webpack -p --config ./webpack.production.config.js --progress"
@@ -54,6 +55,8 @@
   },
   "homepage": "https://github.com/UCSDTCT/Dmail",
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   }
 }

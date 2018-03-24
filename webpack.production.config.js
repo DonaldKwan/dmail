@@ -16,8 +16,6 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './app/mailbox.html', to: "mailbox/index.html" }
     ]),
-    new webpack.optimize.CommonsChunkPlugin('common'),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.AggressiveMergingPlugin()
   ],
