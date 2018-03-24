@@ -7,7 +7,7 @@
     "build-production": "webpack -p --config ./webpack.production.config.js --progress",
     "dev": "webpack-dev-server",
     "start": "node index.js",
-    "heroku-postbuild": "webpack -p --config ./webpack.production.config.js --progress"
+    "heroku-postbuild": "truffle compile && webpack -p --config ./webpack.production.config.js"
   },
   "contributors": [
     "David Hacker",
