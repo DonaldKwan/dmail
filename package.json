@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "Secure, decentralized email via Ethereum",
   "scripts": {
-    "build-dev": "webpack",
-    "build-production": "webpack -p --config ./webpack.production.config.js && cp -R build/*.woff* build/mailbox/",
     "dev": "webpack-dev-server",
-    "start": "node index.js",
-    "heroku-postbuild": "truffle compile && npm run build-production"
+    "build": "webpack -p --config ./webpack.production.config.js && cp -R build/*.woff* build/mailbox/",
+    "heroku-postbuild": "truffle compile && npm run build",
+    "start": "node index.js"
   },
   "contributors": [
     "David Hacker",
