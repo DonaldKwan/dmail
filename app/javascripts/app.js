@@ -156,14 +156,24 @@ window.App = {
         console.error(err);
       }
       else {
-        var html = "<table><tr><th>Message</th><th>Sender</th></tr>";
+        // If valid private key not saved, do so.
+        var cookie_index = 'privatekey' + account;
+        if (Cookies.get(cookie_index) == undefined) {
+          var private_key_pem = rsa.serialize_private_key(private_key);
+          Cookies.set(cookie_index, private_key_pem);
+        }
+
+        // Generate table from mail array
+        var html = "<table><tr><th>Semder</th><th>Message</th></tr>";
         for(var i = 0; i < mail.length; i++){
           html += "<tr>";
-          html += "<td>" + mail[i].message + "</td>";
           html += "<td>" + mail[i].sender + "</td>";
+          html += "<td>" + mail[i].message + "</td>";
           html += "</tr>";
         }
         html += "</table>";
+
+        // Div should refer to generated HTML
         $('#received-mail').html(html);
       }
 
