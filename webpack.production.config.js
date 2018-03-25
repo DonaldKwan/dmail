@@ -15,7 +15,9 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
       { from: './app/mailbox.html', to: "mailbox/index.html" }
-    ])
+    ]),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin()
   ],
   module: {
     rules: [
