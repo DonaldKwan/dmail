@@ -97,8 +97,7 @@ window.App = {
               }
               else {
                 // Save private key to cookies
-                Cookies.set('address', account);
-                Cookies.set('privatekey', pem_formats.privateKey);
+                Cookies.set('privatekey' + account, pem_formats.privateKey);
 
                 Materialize.toast("Done!", TOAST_DURATION);
 
@@ -278,12 +277,13 @@ window.App = {
   getPrivateKey: function(address, callback) {
     var self = this;
 
-    // The user's account matches the saved address associated with the private key
-    if (Cookies.get('address') == String(address)) {
-      callback(null, rsa.deserialize_private_key(Cookies.get('privatekey')))
+    // Check if a cookie with their address exists
+    var private_key_pem = Cookies.get('privatekey' + address);
+    if (private_key_pem == undefined) {
+      callback(null, undefined);
     }
     else {
-      callback(null, undefined);
+      callback(null, rsa.deserialize_private_key(private_key_pem));
     }
   },
 
