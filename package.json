@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "build": "webpack -p --config ./webpack.production.config.js && cp -R build/*.woff* build/mailbox/",
-    "heroku-postbuild": "truffle compile && npm run build",
+    "heroku-postbuild": "truffle compile && truffle migrate --network ropsten && npm run build",
     "start": "node index.js"
   },
   "contributors": [
@@ -26,6 +26,7 @@
     "node-forge": "^0.7.1",
     "truffle": "^4.0.6",
     "truffle-contract": "^1.1.11",
+    "truffle-hdwallet-provider": "^0.0.3",
     "web3": "^0.20.0",
     "webpack": "^2.2.1",
     "copy-webpack-plugin": "^4.0.1",
