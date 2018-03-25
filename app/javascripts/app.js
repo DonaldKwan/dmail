@@ -164,7 +164,7 @@ window.App = {
         }
 
         // Iterate through mail array and append row to table
-        for (var i = mail.length; i >= 0; i--) {
+        for (var i = mail.length - 1; i >= 0; i--) {
           var uuid = guid();
           var row = "<tr><td>" + mail[i].sender + "</td><td id=\"" + uuid + "\"></td></tr>";
 
