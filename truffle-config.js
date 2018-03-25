@@ -4,8 +4,10 @@ require('babel-register');
 var HDWalletProvider = require("truffle-hdwallet-provider");
 
 // Ropsten network
-var mnemonic = "glow cheese defy begin hair notable adapt expire job weekend absent slow"; //  process.env.INFURA_MNEMONIC;
-var token = "nq7lKSWouqpyH5wddc1W"; // process.env.INFURA_TOKEN;
+var ropsten = {
+  mnemonic: process.env.ROPSTEN_MNEMONIC,
+  token: process.env.ROPSTEN_TOKEN
+}
 
 module.exports = {
   networks: {
@@ -15,10 +17,10 @@ module.exports = {
       network_id: '*' // Match any network id
     },
     ropsten: {
-      provider: new HDWalletProvider(mnemonic, "https://ropsten.infura.io/" + token),
+      provider: new HDWalletProvider(ropsten.mnemonic, "https://ropsten.infura.io/" + ropsten.token),
       network_id: 3,
       gas: 4500000,
-      gasPrice: 1500000000, // 1.5 Gwei
+      gasPrice: 3000000000, // 3 Gwei
       from: "0xff9e697ed54bb41df307e359c78fd1b514cfd123"
     }
   }
