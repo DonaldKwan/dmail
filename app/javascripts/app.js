@@ -165,11 +165,18 @@ window.App = {
 
         // Iterate through mail array and append row to table
         for (var i = mail.length - 1; i >= 0; i--) {
-          var uuid = guid();
-          var row = "<tr><td>" + mail[i].sender + "</td><td id=\"" + uuid + "\"></td></tr>";
+          var uuid = guid(); // Random UUID used for text setting
 
+          // Build new row using UUID
+          var row = "<tr>";
+          row += "<td id=\"s" + uuid + "\"></td>";
+          row += "<td id=\"m" + uuid + "\"></td>";
+          row += "</tr>";
+
+          // Prevent XSS attacks by using text() to avoid rendering HTML
           $('#received-mail tbody').append(row);
-          $('#' + uuid).text(mail[i].message); // Prevent XSS attacks by not rendering HTML
+          $('#s' + uuid).text(mail[i].sender);
+          $('#m' + uuid).text(mail[i].message);
         }
       }
 
