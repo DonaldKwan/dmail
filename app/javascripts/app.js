@@ -62,7 +62,7 @@ window.App = {
     }
 
     // Update the address display
-    $('#display-address').text("Your address is "+account+".");
+    $('#display-address').text("Your address is " + account + ".");
 
     // Change screens (loading -> setup/use)
     $('#loading-mailbox').addClass('hide');
@@ -139,7 +139,7 @@ window.App = {
           $('#private-key-modal').modal('open');
         }
         else {
-          App.openMail(private_key);
+          App.openMail(private_key, true);
         }
       }
     });
@@ -150,10 +150,8 @@ window.App = {
    *
    * @param  {Object} private_key The user's private key as a Forge object
    */
-  openMail: function(private_key) {
+  openMail: function(private_key, recurse) {
     App.getMail(account, private_key, function(err, mail) {
-      console.log("Refreshing mail ... " + mail.length + " in inbox.");
-
       if (err) {
         Materialize.toast("There was an error loading your mail.", ERROR_TOAST_DURATION);
         console.error(err);
@@ -171,9 +169,11 @@ window.App = {
       }
 
       // After waiting for REFRESH_DELAY milliseconds, fetch mail again
-      setTimeout(function() {
-        App.openMail(private_key);
-      }, REFRESH_DELAY);
+      if (recurse) {
+        setTimeout(function() {
+          App.openMail(private_key, recurse);
+        }, REFRESH_DELAY);
+      }
     });
   },
 
@@ -440,7 +440,7 @@ $(document).ready(function() {
     else {
       try {
         var private_key = rsa.deserialize_private_key(pem);
-        App.openMail(private_key);
+        App.openMail(private_key, true);
       }
       catch (err) {
         Materialize.toast("You entered an invalid private key!", ERROR_TOAST_DURATION);
