@@ -1,5 +1,7 @@
 # Dmail
 
+_Now live at http://tsedmail.herokuapp.com/! Contract deployed on the Ropsten testnet._
+
 __Decentralized email running on the Ethereum blockchain__
 
 <p align="center">

@@ -152,6 +152,8 @@ window.App = {
    */
   openMail: function(private_key) {
     App.getMail(account, private_key, function(err, mail) {
+      console.log("Refreshing mail ... " + mail.length + " in inbox.");
+
       if (err) {
         Materialize.toast("There was an error loading your mail.", ERROR_TOAST_DURATION);
         console.error(err);
