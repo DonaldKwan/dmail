@@ -164,7 +164,7 @@ window.App = {
         }
 
         // Generate table from mail array
-        var html = "<table><tr><th>Semder</th><th>Message</th></tr>";
+        var html = "<table><tr><th>Sender</th><th>Message</th></tr>";
         for(var i = 0; i < mail.length; i++){
           html += "<tr>";
           html += "<td>" + mail[i].sender + "</td>";
