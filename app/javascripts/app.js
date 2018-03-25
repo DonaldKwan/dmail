@@ -102,8 +102,8 @@ window.App = {
                 Materialize.toast("Done!", TOAST_DURATION);
 
                 // Handle displays
-                $('#display-private-key').html(pem_formats.privateKey.split('\n').join('<br>'));
-                $('#display-public-key').html(pem_formats.publicKey.split('\n').join('<br>'));
+                $('#display-private-key').text(pem_formats.privateKey);
+                $('#display-public-key').text(pem_formats.publicKey);
                 $('#doing-keygen').addClass('hide');
                 $('#finished-keygen').removeClass('hide');
               }
@@ -163,18 +163,14 @@ window.App = {
           Cookies.set(cookie_index, private_key_pem);
         }
 
-        // Generate table from mail array
-        var html = "<table><tr><th>Sender</th><th>Message</th></tr>";
-        for(var i = 0; i < mail.length; i++){
-          html += "<tr>";
-          html += "<td>" + mail[i].sender + "</td>";
-          html += "<td>" + mail[i].message + "</td>";
-          html += "</tr>";
-        }
-        html += "</table>";
+        // Iterate through mail array and append row to table
+        for (var i = mail.length; i >= 0; i--) {
+          var uuid = guid();
+          var row = "<tr><td>" + mail[i].sender + "</td><td id=\"" + uuid + "\"></td></tr>";
 
-        // Div should refer to generated HTML
-        $('#received-mail').html(html);
+          $('#received-mail tbody').append(row);
+          $('#' + uuid).text(mail[i].message); // Prevent XSS attacks by not rendering HTML
+        }
       }
 
       // After waiting for REFRESH_DELAY milliseconds, fetch mail again
@@ -263,7 +259,6 @@ window.App = {
       var aes_iv = base64.decode(value[2]);
       var sender = value[3];
       var aes_key = rsa.decrypt(encrypted_aes_key, private_key);
-
       var message = aes.decrypt(ciphertext, aes_key, aes_iv);
 
       mail.push({
@@ -474,3 +469,12 @@ $(document).ready(function() {
 
   App.start();
 });
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
