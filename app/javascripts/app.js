@@ -33,6 +33,7 @@ var account;
 // Global constants
 const TOAST_DURATION = 3000;
 const ERROR_TOAST_DURATION = 5000;
+const REFRESH_DELAY = 60000;
 
 window.App = {
 
@@ -150,18 +151,27 @@ window.App = {
    * @param  {Object} private_key The user's private key as a Forge object
    */
   openMail: function(private_key) {
-    App.getMail(account, private_key, function(err, mail){
-      var html = "<table><tr><th>Message</th><th>Sender</th></tr>";
-      for(var i=0; i<mail.length; i++){
-        html += "<tr>";
-        html+="<td>"+mail[i].message+"</td>";
-        html+="<td>"+mail[i].sender+"</td>";
-        html+="</tr>";
+    App.getMail(account, private_key, function(err, mail) {
+      if (err) {
+        Materialize.toast("There was an error loading your mail.", ERROR_TOAST_DURATION);
+        console.error(err);
       }
-      html+="</table>";
-      document.getElementById("received-mail").innerHTML = html;
-      console.log("User's mail: ")
-      console.log(mail);
+      else {
+        var html = "<table><tr><th>Message</th><th>Sender</th></tr>";
+        for(var i = 0; i < mail.length; i++){
+          html += "<tr>";
+          html += "<td>" + mail[i].message + "</td>";
+          html += "<td>" + mail[i].sender + "</td>";
+          html += "</tr>";
+        }
+        html += "</table>";
+        $('#received-mail').html(html);
+      }
+
+      // After waiting for REFRESH_DELAY milliseconds, fetch mail again
+      setTimeout(function() {
+        App.openMail(private_key);
+      }, REFRESH_DELAY);
     });
   },
 
@@ -225,7 +235,7 @@ window.App = {
    * @param  {Number}   count       The total amount of mail the user possesses
    * @return {Function} callback    A function taking an error and mail array (if successful, error will null)
    */
-  getMailByIndex: function(address, private_key, mail, index, count, callback){
+  getMailByIndex: function(address, private_key, mail, index, count, callback) {
     if(index == count){
       callback(null, mail);
       return;
@@ -376,15 +386,24 @@ $(document).ready(function() {
       return;
     }
 
+    // Disable additional submits
+    $('#message-form-button').addClass('disabled');
+
     // Get the public key of the user we want to send to
     App.getPublicKey(values.recipient, function(err, public_key) {
       if (err) {
           Materialize.toast("An error occurred. Press F12 to see details.", ERROR_TOAST_DURATION);
           console.error(err);
+
+          // Enable next message submit
+          $('#message-form-button').removeClass('disabled');
       }
       else {
         if (public_key == undefined) {
           Materialize.toast("That person has not uploaded his/her public key.", ERROR_TOAST_DURATION);
+
+          // Enable next message submit
+          $('#message-form-button').removeClass('disabled');
         }
         else {
           Materialize.toast("Encrypting & sending message ...", TOAST_DURATION);
@@ -400,6 +419,9 @@ $(document).ready(function() {
               $('#recipient').val("");
               $('#message').val("");
             }
+
+            // Enable next message submit
+            $('#message-form-button').removeClass('disabled');
           });
         }
       }
