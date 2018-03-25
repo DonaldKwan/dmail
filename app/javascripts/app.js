@@ -163,6 +163,9 @@ window.App = {
           Cookies.set(cookie_index, private_key_pem);
         }
 
+        // Clear table
+        $('#received-mail tbody').empty();
+
         // Iterate through mail array and append row to table
         for (var i = mail.length - 1; i >= 0; i--) {
           var uuid = guid(); // Random UUID used for text setting
