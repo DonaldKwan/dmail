@@ -28,3 +28,12 @@ main {
 	overflow: auto;
 	word-break: break-all;
 }
+
+#received-mail table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#received-mail tr {
+    border-bottom: 1px solid lightgray;
+}
