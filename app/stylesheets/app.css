@@ -30,12 +30,15 @@ main {
 }
 
 #received-mail table {
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
 }
 
-#received-mail tr {
-    border-left: 1px solid lightgray;
-    border-right: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
+#received-mail td {
+  border: 1px solid lightgray;
+  padding: 20px;
+}
+
+#received-mail th {
+  border: 1px solid lightgray;
+  padding: 10px;
 }
