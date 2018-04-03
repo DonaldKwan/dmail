@@ -48,7 +48,7 @@ function decrypt(bytes, key, iv) {
   });
   decipher.update(forge.util.createBuffer(bytes));
   decipher.finish();
-  return decipher.output.getBytes();
+  return forge.util.decodeUtf8(decipher.output.getBytes());
 }
 
 export { keygen, encrypt, decrypt }
