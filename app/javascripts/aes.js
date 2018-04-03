@@ -27,7 +27,7 @@ function encrypt(message, key, iv) {
   cipher.start({
     iv: iv
   });
-  cipher.update(forge.util.createBuffer(message));
+  cipher.update(forge.util.createBuffer(message, 'utf8'));
   cipher.finish();
   return cipher.output.getBytes();
 }
@@ -48,7 +48,7 @@ function decrypt(bytes, key, iv) {
   });
   decipher.update(forge.util.createBuffer(bytes));
   decipher.finish();
-  return forge.util.decodeUtf8(decipher.output.getBytes());
+  return forge.util.decodeUtf8(decipher.output.toString('utf8'));
 }
 
 export { keygen, encrypt, decrypt }
