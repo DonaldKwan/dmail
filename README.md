@@ -5,7 +5,7 @@ _Now live at http://tsedmail.herokuapp.com/ (contract deployed on Ropsten testne
 <b>D</b>ecentralized E<b>mail</b> is an Ethereum DApp that combines messaging, modern cryptographic techniques, and the blockchain. Any user with a valid Ethereum address can send messages to another account. These messages are stored on the blockchain and remain encrypted in transit: only the receiver is able to read messages meant for them. Because of this, Dmail offers both security and reliability as a platform.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/UCSDTCT/Dmail/master/diagrams/use-case-diagram.png"/>
+  <img src="https://raw.githubusercontent.com/UCSDTCT/Dmail/master/diagrams/old-diagram.png"/>
 </p>
 
 ## How It Works
